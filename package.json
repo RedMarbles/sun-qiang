@@ -1,0 +1,17 @@
+{
+  "name": "sun-qiang",
+  "version": "1.0.0",
+  "description": "A battle manager for cultivation servers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TribeOfOne",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "eslint": "^5.0.1",
+    "sequelize": "^4.38.0",
+    "sqlite3": "^4.0.1"
+  }
+}
