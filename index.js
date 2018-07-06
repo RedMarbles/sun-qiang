@@ -22,41 +22,50 @@ const cache = new Discord.Collection();
 // Helper methods using the cache
 Reflect.defineProperty(cache, 'newUser', {
 	value: async function newUser(id) {
-		const user = await Users.create({ user_id: id, health: DEFAULT_HEALTH, slaps: DEFAULT_SLAPS });
-		cache.set(id, user);
-		return user;
+		try {
+			const user = await Users.create({ user_id: id, health: DEFAULT_HEALTH, slaps: DEFAULT_SLAPS });
+			console.log('User creation successful');
+			cache.set(id, user);
+			return user;
+		}
+		catch(error) {
+			console.log('newUser error')
+			console.error(error);
+		}
 	},
 });
 Reflect.defineProperty(cache, 'addHealth', {
-	value: function addHealth(id, amount) {
-		const user = cache.get(id) || cache.newUser(id);
+	value: async function addHealth(id, amount) {
+		const user = cache.get(id) || await cache.newUser(id);
 		if (user) {
 			user.health += Number(amount);
-			return user.save();
+			try {return user.save();}
+			catch(error) {console.error('addhealth error');}
 		}
 		return console.error('Error - Could not find user');
 	},
 });
 Reflect.defineProperty(cache, 'addSlaps', {
-	value: function addSlaps(id, amount) {
-		const user = cache.get(id) || cache.newUser(id);
+	value: async function addSlaps(id, amount) {
+		const user = cache.get(id) || await cache.newUser(id);
 		if (user) {
 			user.slaps += amount;
-			return user.save();
+			try {return user.save();}
+			catch(error) {console.error('addSlaps error');}
 		}
 		return console.error('Error - Could not find user');
 	},
 });
 Reflect.defineProperty(cache, 'getStats', {
-	value: function getStats(id) {
-		const user = cache.get(id) || cache.newUser(id);
+	value: async function getStats(id) {
+		const user = cache.get(id) || await cache.newUser(id);
 		if (user) return { health: user.health, slaps: user.slaps };
 		console.error('Error - Could not find user');
 		return { health: 0, slaps: 0 };
 	},
 });
 Reflect.defineProperty(cache, 'reset', {
-	value: function reset() {
+	value: async function reset() {
 		cache.forEach((id, user, map) => {
 			user.health = DEFAULT_HEALTH;
 			user.slaps = DEFAULT_SLAPS;
@@ -76,7 +85,12 @@ for (const file of commandFiles) {
 // Set up a cooldown timer
 const cooldowns = new Discord.Collection();
 
-client.on('ready', () => {
+client.on('ready', async () => {
+	// Ready cache data
+	const storedUsers = await Users.findAll();
+	storedUsers.forEach(user => cache.set(user.user_id, user));
+	console.log(`Found ${storedUsers.length} users in the existing database.`);
+
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 

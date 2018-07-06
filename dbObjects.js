@@ -12,4 +12,4 @@ const sequelize = new Sequelize('SQdatabase', 'TribeOfOne', 's3cur3_password', {
 
 const Users = sequelize.import('models/Users');
 
-module.exports = { Users }
+module.exports = { Users };
