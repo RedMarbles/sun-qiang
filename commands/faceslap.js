@@ -33,13 +33,14 @@ module.exports = {
 		}
 
 		// Calculate damage dealt
-		const multiplier = 1.0;
+		const matchup = attributes.find(att => (att.user === userRole.name) && (att.target === targetRole.name));
+		const multiplier = (matchup) ? matchup.multiplier : 1.0;
 		const damage = Math.floor(DEFAULT_DAMAGE * multiplier);
 		cache.addHealth(target.id, -damage);
 		cache.addSlaps(message.member.id, -1);
 		const { health: newhealth } = await cache.getStats(target.id);
 
-		let output = `${userRole.name} ${message.member} brutally faceslapped ${targetRole.name} ${target}, dealing ${damage} damage.`;
+		let output = `${userRole.name} **${message.member.displayName}** brutally faceslapped ${targetRole.name} **${target.displayName}**, dealing **${damage}** damage.`;
 		output += `\n${target.displayName} has **${newhealth} HP** remaining.`;
 		output += `\n${message.member.displayName} has **${userStats.slaps - 1}** slaps remaining for the day.`;
 		message.channel.send(output);
