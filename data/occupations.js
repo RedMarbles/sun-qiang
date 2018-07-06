@@ -41,12 +41,22 @@ module.exports = {
 		{ user: 'Physician', target: 'Soul Oracle', multiplier: 0.7 },
 		{ user: 'Beast Tamer', target: 'Soul Oracle', multiplier: 0.7 },
 		{ user: 'Formation Master', target: 'Soul Oracle', multiplier: 0.7 },
-		{ user: 'Soul Oracle', target: 'Soul Oracle', multiplier: 0.7 },
+		{ user: 'Soul Oracle', target: 'Soul Oracle', multiplier: 2.5 },
 		{ user: 'Celestial Designer', target: 'Soul Oracle', multiplier: 0.7 },
 		{ user: 'Poison Master', target: 'Soul Oracle', multiplier: 0.7 },
 		{ user: 'Painter', target: 'Soul Oracle', multiplier: 0.7 },
-		{ user: 'Demonic Tunist', target: 'Soul Oracle', multiplier: 0.7 },
+		{ user: 'Demonic Tunist', target: 'Soul Oracle', multiplier: 1.5 },
 		{ user: 'Blacksmith', target: 'Soul Oracle', multiplier: 0.7 },
+		// Soul Oracles deal reduced damage to all occupations (except other Soul Oracles)
+		{ user: 'Soul Oracle', target: 'Apothecary', multiplier: 0.7 },
+		{ user: 'Soul Oracle', target: 'Physician', multiplier: 0.7 },
+		{ user: 'Soul Oracle', target: 'Beast Tamer', multiplier: 0.7 },
+		{ user: 'Soul Oracle', target: 'Formation Master', multiplier: 0.7 },
+		{ user: 'Soul Oracle', target: 'Celestial Designer', multiplier: 0.7 },
+		{ user: 'Soul Oracle', target: 'Poison Master', multiplier: 0.7 },
+		{ user: 'Soul Oracle', target: 'Painter', multiplier: 0.7 },
+		{ user: 'Soul Oracle', target: 'Demonic Tunist', multiplier: 0.7 },
+		{ user: 'Soul Oracle', target: 'Blacksmith', multiplier: 0.7 },
 		// Apothecaries heal Physicians and do reduced damage to Poison Masters
 		{ user: 'Apothecary', target: 'Physician', multiplier: -0.7 },
 		{ user: 'Apothecary', target: 'Poison Master', multiplier: 0.7 },
@@ -69,6 +79,6 @@ module.exports = {
 		{ user: 'Painter', target: 'Formation Master', multiplier: 3.0 },
 		// The Demonic Tunist isn't good or bad against anything (except against Soul Oracles)
 		// Blacksmiths deal extra damage to Celestial Designers
-		{ user: 'Blacksmith', target: 'Celestial Designer', multiplier: 0.0 },
+		{ user: 'Blacksmith', target: 'Celestial Designer', multiplier: 1.5 },
 	],
 };
