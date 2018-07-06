@@ -7,7 +7,7 @@ module.exports = {
 	description: 'Launch a humiliating attack against another cultivator',
 	args: true,
 	usage: '<user>',
-	aliases: ['slap'],
+	aliases: ['slap', 'face'],
 	guildOnly: true,
 	cooldown: 4,
 	async execute(message, args, cache) {
@@ -40,7 +40,7 @@ module.exports = {
 		cache.addSlaps(message.member.id, -1);
 		const { health: newhealth } = await cache.getStats(target.id);
 
-		let output = `${userRole.name} **${message.member.displayName}** brutally faceslapped ${targetRole.name} **${target.displayName}**, dealing **${damage}** damage.`;
+		let output = `*${userRole.name}* **${message.member.displayName}** brutally faceslapped *${targetRole.name}* **${target.displayName}**, dealing **${damage}** damage.`;
 		output += `\n${target.displayName} has **${newhealth} HP** remaining.`;
 		output += `\n${message.member.displayName} has **${userStats.slaps - 1}** slaps remaining for the day.`;
 		message.channel.send(output);

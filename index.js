@@ -66,10 +66,11 @@ Reflect.defineProperty(cache, 'getStats', {
 });
 Reflect.defineProperty(cache, 'reset', {
 	value: async function reset() {
-		cache.forEach((id, user, map) => {
+		cache.forEach((user, id, map) => {
 			user.health = DEFAULT_HEALTH;
 			user.slaps = DEFAULT_SLAPS;
-			return user.save();
+			try {user.save();}
+			catch(error) {console.error('cache reset error');}
 		});
 	},
 });
