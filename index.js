@@ -3,6 +3,7 @@
 const DEFAULT_COOLDOWN = 3;
 const DEFAULT_HEALTH = 100;
 const DEFAULT_SLAPS = 5;
+const DEFAULT_CHANNEL = 'faceslap';
 
 const Discord = require('discord.js');
 
@@ -82,6 +83,7 @@ client.on('ready', () => {
 client.on('message', (message) => {
 	if (message.author.bot) return;
 	if (!message.content.startsWith(prefix)) return;
+	if (message.channel.name !== DEFAULT_CHANNEL) return message.channel.send(`Sorry, Sun Qiang will only reply on the ${DEFAULT_CHANNEL} channel`);
 
 	const input = message.content.slice(prefix.length).trim();
 	if (!input.length) return;
