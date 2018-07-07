@@ -11,16 +11,15 @@ function changeRole(oldRole, newRole, message) {
 		message.member.removeRole(oldRole.id);
 	}
 	message.member.addRole(newRole.id);
-	//message.reply(`You have switched to the ${newRole.name} occupation!`);
 	message.channel.send(new Discord.RichEmbed({ color: colors.gray, description: `${message.author} has become a **${newRole.name}**!` }));
 	return true;
-};
+}
 
 function findOccupation(input, message) {
 	const newOccupation = occupations.find(occ => (input === occ.name.toLowerCase()) || occ.alias.map(a => a.toLowerCase()).includes(input));
 	if (!newOccupation) return message.reply(`Sorry, I couldn't find an occupation that matches '${input}'`);
 	return message.guild.roles.find(r => r.name === newOccupation.name);
-};
+}
 
 module.exports = {
 	name: 'role',
@@ -42,14 +41,14 @@ module.exports = {
 		}
 		// If there was no argument, provide a list of occupations to choose from
 		else {
-			let output = [];
+			const output = [];
 			let count = 1;
 			occupations.forEach(occ => {
 				output.push(`**${count}.** ${occ.name}   [ ${occ.alias.join(', ')} ]`);
 				count += 1;
 			});
 			const listEmbed = new Discord.RichEmbed({ color: colors.gray });
-			listEmbed.addField('Choose an occupation:',output.join('\n'));
+			listEmbed.addField('Choose an occupation:', output.join('\n'));
 			message.channel.send(listEmbed);
 
 			// Create a collector to get the response from the user

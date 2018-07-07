@@ -29,7 +29,7 @@ Reflect.defineProperty(cache, 'newUser', {
 			return user;
 		}
 		catch(error) {
-			console.log('newUser error')
+			console.log('newUser error');
 			console.error(error);
 		}
 	},
@@ -98,7 +98,9 @@ client.on('ready', async () => {
 client.on('message', (message) => {
 	if (message.author.bot) return;
 	if (!message.content.startsWith(prefix)) return;
-	if (message.channel.name !== DEFAULT_CHANNEL) return message.channel.send(`Sorry, Sun Qiang will only reply on the ${DEFAULT_CHANNEL} channel`);
+	if (message.channel.name !== DEFAULT_CHANNEL && message.channel.type !== 'dm') {
+		return message.channel.send(`Sorry, Sun Qiang will only reply on the ${DEFAULT_CHANNEL} channel`);
+	}
 
 	const input = message.content.slice(prefix.length).trim();
 	if (!input.length) return;

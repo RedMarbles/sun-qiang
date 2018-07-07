@@ -16,7 +16,7 @@ module.exports = {
 		const role = target.roles.find(r => occupations.map(occ => occ.name).includes(r.name));
 		const { health, slaps } = await cache.getStats(target.id);
 
-		const embed = new Discord.RichEmbed({ 
+		const embed = new Discord.RichEmbed({
 			color: colors.gray,
 		});
 		embed.setThumbnail(target.user.displayAvatarURL);
@@ -42,7 +42,7 @@ module.exports = {
 		});
 		if (!defensiveMultipliers.length) defensiveMultipliers.push('N/A');
 		embed.addField('Defensive Multipliers', defensiveMultipliers.join('\n'), true);
-		
+
 		message.channel.send(embed);
-	}
+	},
 };

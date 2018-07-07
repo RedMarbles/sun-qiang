@@ -1,4 +1,7 @@
-const { occupations, attributes  } = require('../data/occupations');
+const Discord = require('discord.js');
+
+const { occupations, attributes } = require('../data/occupations');
+const colors = require('../data/colors');
 
 const DEFAULT_DAMAGE = 10;
 
@@ -24,13 +27,22 @@ module.exports = {
 		const targetStats = await cache.getStats(target.id);
 
 		if (userStats.health < 1) {
-			return message.channel.send(`Sorry ${message.member.displayName}, but your health is currently ${userStats.health}. You're too weak to fight.`);
+			return message.channel.send(new Discord.RichEmbed({
+				color: colors.red,
+				description: `Sorry **${message.member.displayName}**, but your health is currently ${userStats.health}. You're too weak to fight.`,
+			}));
 		}
 		if (userStats.slaps < 1) {
-			return message.channel.send(`Sorry ${message.member.displayName}, but you've used up all your slaps for the day.`);
+			return message.channel.send(new Discord.RichEmbed({
+				color: colors.red,
+				description: `Sorry **${message.member.displayName}**, but you've used up all your slaps for the day.`,
+			}));
 		}
 		if (targetStats.health < 1) {
-			return message.channel.send(`${target.displayName} has already been knocked senseless. There's no point beating a dead horse.`);
+			return message.channel.send(new Discord.RichEmbed({
+				color: colors.red,
+				description: `**${target.displayName}** has already been knocked senseless. There's no point beating a dead horse.`,
+			}));
 		}
 
 		// Calculate damage dealt
@@ -44,6 +56,9 @@ module.exports = {
 		let output = `*${userRole.name}* **${message.member.displayName}** brutally faceslapped *${targetRole.name}* **${target.displayName}**, dealing **${damage}** damage.`;
 		output += `\n${target.displayName} has **${newhealth} HP** remaining.`;
 		output += `\n${message.member.displayName} has **${userStats.slaps - 1}** slaps remaining for the day.`;
-		message.channel.send(output);
+		message.channel.send(new Discord.RichEmbed({ 
+			color: colors.yellow, 
+			title: 'Faceslap!', 
+			description: output, }));
 	},
 };
