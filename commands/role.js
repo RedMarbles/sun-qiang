@@ -1,4 +1,7 @@
+const Discord = require('discord.js');
+
 const { occupations } = require('../data/occupations');
+const colors = require('../data/colors');
 
 function changeRole(oldRole, newRole, message) {
 	if (!newRole) {
@@ -8,7 +11,15 @@ function changeRole(oldRole, newRole, message) {
 		message.member.removeRole(oldRole.id);
 	}
 	message.member.addRole(newRole.id);
-	message.reply(`You have switched to the ${newRole.name} occupation!`);
+	//message.reply(`You have switched to the ${newRole.name} occupation!`);
+	message.channel.send(new Discord.RichEmbed({ color: colors.gray, description: `${message.author} has become a **${newRole.name}**!` }));
+	return true;
+};
+
+function findOccupation(input, message) {
+	const newOccupation = occupations.find(occ => (input === occ.name.toLowerCase()) || occ.alias.map(a => a.toLowerCase()).includes(input));
+	if (!newOccupation) return message.reply(`Sorry, I couldn't find an occupation that matches '${input}'`);
+	return message.guild.roles.find(r => r.name === newOccupation.name);
 };
 
 module.exports = {
@@ -26,35 +37,40 @@ module.exports = {
 
 		// If there was an argument, compare against the occupations and aliases to find the correct new occupation
 		if (args.length) {
-			const argsString = args.join(' ').toLowerCase();
-			const newOccupation = occupations.find(occ => (argsString === occ.name.toLowerCase()) || occ.alias.map(a => a.toLowerCase()).includes(argsString));
-			if (!newOccupation) return message.reply(`Sorry, I couldn't find an occupation that matches '${argsString}'`);
-			newRole = message.guild.roles.find(r => r.name === newOccupation.name);
+			newRole = findOccupation(args.join(' ').toLowerCase(), message);
 			changeRole(oldRole, newRole, message);
 		}
 		// If there was no argument, provide a list of occupations to choose from
 		else {
-			let output = 'The occupations you can choose from are:';
+			let output = [];
 			let count = 1;
 			occupations.forEach(occ => {
-				output += `\n ${count}. ${occ.name}   [ ${occ.alias.join(', ')} ]`;
+				output.push(`**${count}.** ${occ.name}   [ ${occ.alias.join(', ')} ]`);
 				count += 1;
 			});
-			output += '\nSelect the number that corresponds to the chosen occupation.';
-			message.reply(output);
+			const listEmbed = new Discord.RichEmbed({ color: colors.gray });
+			listEmbed.addField('Choose an occupation:',output.join('\n'));
+			message.channel.send(listEmbed);
 
 			// Create a collector to get the response from the user
-			const filter = m => (m.author.id === message.author.id) && Number.isInteger(Number(m.content));
+			const filter = m => (m.author.id === message.author.id);
 			const collector = message.channel.createMessageCollector(filter, { time: 10000 });
 			collector.on('collect', m => {
-				const n = Number(m.content);
-				if ((n < 1) || (n > occupations.length)) {
-					return message.channel.send(`Please enter a number between 1 and ${occupations.length}`);
+				if (Number.isInteger(Number(m.content))) {
+					const n = Number(m.content);
+					if ((n < 1) || (n > occupations.length)) {
+						return message.channel.send(`Please enter a number between 1 and ${occupations.length}`);
+					}
+					const newOccupation = occupations[n - 1];
+					newRole = message.guild.roles.find(r => r.name === newOccupation.name);
+					changeRole(oldRole, newRole, message);
+					collector.stop();
+					return;
 				}
-				const newOccupation = occupations[n - 1];
-				newRole = message.guild.roles.find(r => r.name === newOccupation.name);
-				changeRole(oldRole, newRole, message);
-				collector.stop();
+				newRole = findOccupation(m.content.trim().toLowerCase(), message);
+				if (changeRole(oldRole, newRole, message)) {
+					collector.stop();
+				}
 			});
 			collector.on('end', collected => {
 				if (!newRole) {
