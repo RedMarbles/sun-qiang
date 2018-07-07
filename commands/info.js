@@ -1,4 +1,7 @@
+const Discord = require('discord.js');
+
 const { occupations, attributes } = require('../data/occupations');
+const colors = require('../data/colors');
 
 module.exports = {
 	name: 'info',
@@ -13,28 +16,33 @@ module.exports = {
 		const role = target.roles.find(r => occupations.map(occ => occ.name).includes(r.name));
 		const { health, slaps } = await cache.getStats(target.id);
 
-		let output = `> Username: ${target.displayName}`;
-		output += `\n> Occupation: ${role.name}`;
-		output += `\n> Health: ${health} HP`;
-		output += `\n> Slap Ammunition: ${slaps} slaps`;
-		output += '\n> Offensive multipliers:';
-		let countOff = 0;
+		const embed = new Discord.RichEmbed({ 
+			color: colors.gray,
+		});
+		embed.setThumbnail(target.user.displayAvatarURL);
+		embed.addField('Username', target.displayName, true);
+		embed.addField('Occupation', role.name, true);
+		embed.addField('Health', `${health} HP`, true);
+		embed.addField('Ammunition', `${slaps} slaps`, true);
+
+		const offenseMultpliers = [];
 		attributes.forEach(att => {
 			if (att.user === role.name) {
-				output += `\n    ${att.multiplier.toFixed(1)} vs ${att.target}s`;
-				countOff += 1;
+				offenseMultpliers.push(`${att.multiplier.toFixed(1)} vs ${att.target}s`);
 			}
 		});
-		if (!countOff) output += '\n    N/A';
-		output += '\n> Defensive multipliers:';
-		let countDef = 0;
+		if (!offenseMultpliers.length) offenseMultpliers.push('N/A');
+		embed.addField('Offensive Multipliers', offenseMultpliers.join('\n'), true);
+
+		const defensiveMultipliers = [];
 		attributes.forEach(att => {
 			if (att.target === role.name) {
-				output += `\n    ${att.multiplier.toFixed(1)} from ${att.user}s`;
-				countDef += 1;
+				defensiveMultipliers.push(`${att.multiplier.toFixed(1)} from ${att.user}s`);
 			}
 		});
-		if (!countDef) output += '\n    N/A';
-		message.channel.send(output, { code: true });
+		if (!defensiveMultipliers.length) defensiveMultipliers.push('N/A');
+		embed.addField('Defensive Multipliers', defensiveMultipliers.join('\n'), true);
+		
+		message.channel.send(embed);
 	}
 };

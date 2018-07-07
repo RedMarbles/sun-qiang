@@ -1,0 +1,15 @@
+module.exports = {
+	white: parseInt('eeeeee', 16),
+	black: parseInt('050505', 16),
+	gray: parseInt('9db0c4', 16),
+	darkgray: parseInt('49505b', 16),
+	red: parseInt('ed0707', 16),
+	darkred: parseInt('9f0505', 16),
+	green: parseInt('11dd07', 16),
+	darkgreen: parseInt('0c6307', 16),
+	blue: parseInt('159be3', 16),
+	darkblue: parseInt('1010e6', 16),
+	yellow: parseInt('d5e610', 16),
+	orange: parseInt('ed5108', 16),
+	brown: parseInt('913207', 16),
+};
