@@ -16,8 +16,9 @@ module.exports = {
 			return message.reply('This command requires you to mention a target user');
 		}
 
-		const userRole = message.member.roles.find(r => occupations.includes(r.name));
-		const targetRole = target.roles.find(r => occupations.includes(r.name));
+		const validRoles = occupations.map(occ => occ.name);
+		const userRole = message.member.roles.find(r => validRoles.includes(r.name)) || { name: 'Unemployed' };
+		const targetRole = target.roles.find(r => validRoles.includes(r.name)) || { name: 'Unemployed' };
 
 		const userStats = await cache.getStats(message.member.id);
 		const targetStats = await cache.getStats(target.id);

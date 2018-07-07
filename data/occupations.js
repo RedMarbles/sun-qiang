@@ -1,16 +1,16 @@
 module.exports = {
 	occupations: [
-		'Apothecary',
-		'Physician',
-		'Beast Tamer',
-		'Formation Master',
-		'Soul Oracle',
-		'Celestial Designer',
-		'Poison Master',
-		'Painter',
-		'Demonic Tunist',
-		'Blacksmith',
-		'Tea Master',
+		{ name: 'Apothecary', alias: ['A', 'Pill Master'] },
+		{ name: 'Physician', alias: ['Ph', 'Doctor'] },
+		{ name: 'Beast Tamer', alias: [ 'BT', 'BM', 'Beast Master', 'Beast', 'Tamer'] },
+		{ name: 'Formation Master', alias: ['FM', 'Formation'] },
+		{ name: 'Soul Oracle', alias: ['SO', 'Soul'] },
+		{ name: 'Celestial Designer', alias: ['CD', 'Celestial', 'Designer'] },
+		{ name: 'Poison Master', alias: ['PM', 'Poison'] },
+		{ name: 'Painter', alias: ['Pa', 'Paint'] },
+		{ name: 'Demonic Tunist', alias: ['DT', 'Demonic', 'Tunist'] },
+		{ name: 'Blacksmith', alias: ['B', 'Black', 'Smith'] },
+		{ name: 'Tea Master', alias: ['TM', 'Tea', 'T'] },
 	],
 	attributes: [
 		// Nobody can harm a Tea Master except another Tea Master, or a Poison Master

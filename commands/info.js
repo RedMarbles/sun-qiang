@@ -10,7 +10,7 @@ module.exports = {
 	cooldown: 10,
 	async execute(message, args, cache) {
 		const target = message.mentions.members.first() || message.member;
-		const role = target.roles.find(r => occupations.includes(r.name));
+		const role = target.roles.find(r => occupations.map(occ => occ.name).includes(r.name));
 		const { health, slaps } = await cache.getStats(target.id);
 
 		let output = `> Username: ${target.displayName}`;
