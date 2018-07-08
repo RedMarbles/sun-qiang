@@ -5,75 +5,18 @@ const DEFAULT_HEALTH = 100;
 const DEFAULT_SLAPS = 5;
 const DEFAULT_CHANNEL = 'faceslap';
 
+// The Discord API
 const Discord = require('discord.js');
 
+// The Node.js fileserver library
 const fs = require('fs');
 
 const config = require('./config.json');
 const { prefix } = config;
 
-const { Users } = require('./dbObjects');
+const { cache, Users, Occupations } = require('./dbObjects');
 
 const client = new Discord.Client();
-
-// Caches the values of the users
-const cache = new Discord.Collection();
-
-// Helper methods using the cache
-Reflect.defineProperty(cache, 'newUser', {
-	value: async function newUser(id) {
-		try {
-			const user = await Users.create({ user_id: id, health: DEFAULT_HEALTH, slaps: DEFAULT_SLAPS });
-			console.log('User creation successful');
-			cache.set(id, user);
-			return user;
-		}
-		catch(error) {
-			console.log('newUser error');
-			console.error(error);
-		}
-	},
-});
-Reflect.defineProperty(cache, 'addHealth', {
-	value: async function addHealth(id, amount) {
-		const user = cache.get(id) || await cache.newUser(id);
-		if (user) {
-			user.health += Number(amount);
-			try {return user.save();}
-			catch(error) {console.error('addhealth error');}
-		}
-		return console.error('Error - Could not find user');
-	},
-});
-Reflect.defineProperty(cache, 'addSlaps', {
-	value: async function addSlaps(id, amount) {
-		const user = cache.get(id) || await cache.newUser(id);
-		if (user) {
-			user.slaps += amount;
-			try {return user.save();}
-			catch(error) {console.error('addSlaps error');}
-		}
-		return console.error('Error - Could not find user');
-	},
-});
-Reflect.defineProperty(cache, 'getStats', {
-	value: async function getStats(id) {
-		const user = cache.get(id) || await cache.newUser(id);
-		if (user) return { health: user.health, slaps: user.slaps };
-		console.error('Error - Could not find user');
-		return { health: 0, slaps: 0 };
-	},
-});
-Reflect.defineProperty(cache, 'reset', {
-	value: async function reset() {
-		cache.forEach((user, id, map) => {
-			user.health = DEFAULT_HEALTH;
-			user.slaps = DEFAULT_SLAPS;
-			try {user.save();}
-			catch(error) {console.error('cache reset error');}
-		});
-	},
-});
 
 // Set up the message handler files
 client.commands = new Discord.Collection();
@@ -88,9 +31,8 @@ const cooldowns = new Discord.Collection();
 
 client.on('ready', async () => {
 	// Ready cache data
-	const storedUsers = await Users.findAll();
-	storedUsers.forEach(user => cache.set(user.user_id, user));
-	console.log(`Found ${storedUsers.length} users in the existing database.`);
+	await cache.init();
+	console.log(`Cached ${cache.size} users from the database.`);
 
 	console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -157,10 +99,6 @@ client.on('message', (message) => {
 		console.error(error);
 		message.reply('Sun Qiang encountered an error while trying to execute that command.');
 	}
-
-	// if (command === 'role') {
-	// 	message.channel.send(`Roles you have: \n${message.member.roles.map(r => r.name).join('\n')}`);
-	// }
 });
 
 client.login(config.token);
