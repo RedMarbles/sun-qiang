@@ -43,6 +43,16 @@ for (const occFile of occupationFiles) {
 	}
 }
 
+// Function to periodically update stamina and health of everyone
+const update = async function() {
+	const promises = [];
+	cache.forEach((element, id) => {
+		promises.push( cache.addStats(id, { health: config.update_health, stamina: config.update_stamina }));
+	});
+	await Promise.all(promises);
+	setTimeout(update, config.update_delay*1000);
+}
+
 // Set up a cooldown timer
 const cooldowns = new Discord.Collection();
 
@@ -121,3 +131,5 @@ client.on('message', async (message) => {
 });
 
 client.login(config.token);
+
+update();

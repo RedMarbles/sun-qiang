@@ -36,9 +36,11 @@ Each role has a set of skills under it, and each skill can have various effects.
 
 Work Progress:
 + Added in a skill and occupation framework, so that using skills can raise exp of an occupation
++ Consume stamina on skill use
++ Regenerate stamina over time
++ Info command now shows skill and occupation information instead of attribute matchups
 
 Work to do:
-* Consume stamina on skill use
-* Regenerate stamina over time
+* Implement skill cooldown
 * Set up separate cultivation and master teacher occupations and isolate them from the rest of the elements.
 * Item framework

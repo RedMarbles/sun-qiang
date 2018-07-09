@@ -143,6 +143,8 @@ cache.addStats = async function(id, statsDiff) {
 			if (!user[stat_name]) return console.error(`ERROR [cache.addStats] - Attempted to access the stat named ${stat_name}`);
 			user[stat_name] += statsDiff[stat_name];
 		}
+		if (user.health > user.health_max) user.health = user.health_max;
+		if (user.stamina > user.stamina_max) user.stamina = user.stamina_max;
 		return user.save();
 	}
 	catch(error) {

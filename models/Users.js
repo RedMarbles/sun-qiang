@@ -20,12 +20,22 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 100,
 			allowNull: false,
 		},
+		health_max: {
+			type: DataTypes.INTEGER,
+			defaultValue: 100,
+			allowNull: false,
+		},
 		slaps: {
 			type: DataTypes.INTEGER,
 			defaultValue: 5,
 			allowNull: false,
 		},
 		stamina: {
+			type: DataTypes.INTEGER,
+			defaultValue: 10,
+			allowNull: false,
+		},
+		stamina_max: {
 			type: DataTypes.INTEGER,
 			defaultValue: 10,
 			allowNull: false,
