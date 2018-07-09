@@ -18,7 +18,7 @@ function changeRole(oldRole, newRole, message) {
 
 function findOccupation(input, message) {
 	const newOccupation = occupations.find(occ => (input === occ.name.toLowerCase()) || occ.alias.map(a => a.toLowerCase()).includes(input));
-	if (!newOccupation) return message.reply(`Sorry, I couldn't find an occupation that matches '${input}'`);
+	if (!newOccupation || newOccupation.unlisted) return message.reply(`Sorry, I couldn't find an occupation that matches '${input}'`);
 	return message.guild.roles.find(r => r.name === newOccupation.name);
 }
 
@@ -48,6 +48,7 @@ module.exports = {
 			const output = [];
 			let count = 1;
 			occupations.forEach(occ => {
+				if (occ.unlisted) return;
 				output.push(`**${count}.** ${occ.name}   [ ${occ.alias.join(', ')} ]`);
 				count += 1;
 			});
@@ -63,10 +64,10 @@ module.exports = {
 
 				if (Number.isInteger(Number(m.content))) {
 					const n = Number(m.content);
-					if ((n < 1) || (n > occupations.length)) {
-						return message.channel.send(`Please enter a number between 1 and ${occupations.length}`);
+					if ((n < 1) || (n > occupations.length - 2)) {
+						return message.channel.send(`Please enter a number between 1 and ${occupations.length - 2}`);
 					}
-					const newOccupation = occupations[n - 1];
+					const newOccupation = occupations[n + 1];
 					newRole = message.guild.roles.find(r => r.name === newOccupation.name);
 					changeRole(oldRole, newRole, message);
 					cache.defaultSkill(message.member, message.channel);

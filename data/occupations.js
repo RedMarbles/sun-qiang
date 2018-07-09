@@ -1,5 +1,7 @@
 module.exports = {
 	occupations: [
+		{ name: 'Cultivator', alias: [], unlisted: true },
+		{ name: 'Master Teacher', alias: [], unlisted: true },
 		{ name: 'Apothecary', alias: ['A', 'Pill Master'] },
 		{ name: 'Physician', alias: ['Ph', 'Doctor'] },
 		{ name: 'Beast Tamer', alias: [ 'BT', 'BM', 'Beast Master', 'Beast', 'Tamer'] },

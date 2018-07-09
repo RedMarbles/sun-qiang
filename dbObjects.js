@@ -113,6 +113,7 @@ cache.newUser = async function(id) {
 				occ_name: occ.name,
 				experience: 0,
 				level: 0,
+				skill_points: 0,
 			});
 			occupations_.set(occ.name, newOcc);
 		}
@@ -213,6 +214,7 @@ cache.addOccupationExperience = async function(message, occName, expGain) {
 		// Check if the requirements are met to level up
 		if ((occupationCache.experience >= expMax) && (occupationProps.canLevelUp(message, this))) {
 			occupationCache.level += 1;
+			occupationCache.skill_points += 1;
 
 			return message.channel.send(new Discord.RichEmbed({
 				color: colors.blue,
