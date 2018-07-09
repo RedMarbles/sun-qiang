@@ -13,6 +13,7 @@ const sequelize = new Sequelize('SQdatabase', 'TribeOfOne', 's3cur3_password', {
 
 sequelize.import('models/Users');
 sequelize.import('models/Occupations');
+sequelize.import('models/Skills');
 
 // Boolean, becomes true if either '--force' or '-f' was used in the arguments when running this command
 const force = process.argv.includes('--force') || process.argv.includes('-f');

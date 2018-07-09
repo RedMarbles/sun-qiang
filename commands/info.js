@@ -16,6 +16,9 @@ module.exports = {
 		const role = target.roles.find(r => occupations.map(occ => occ.name).includes(r.name));
 		const { health, slaps } = await cache.getStats(target.id);
 
+		// Make sure the user has the default skill for the current class
+		cache.defaultSkill(target, message.channel);
+
 		const embed = new Discord.RichEmbed({
 			color: colors.gray,
 		});

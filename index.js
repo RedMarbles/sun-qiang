@@ -18,12 +18,29 @@ const { cache, Users, Occupations } = require('./dbObjects');
 
 const client = new Discord.Client();
 
-// Set up the message handler files
+// Set up the command handler files
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
+}
+
+// Set up the occupation and skill handler files
+client.occupations = new Discord.Collection();
+client.skills = new Discord.Collection();
+const occupationFiles = fs.readdirSync('./data/occupations').filter(file => file.endsWith('.js'));
+for (const occFile of occupationFiles) {
+	const occupation = require(`./data/occupations/${occFile}`);
+	client.occupations.set(occupation.name, occupation);
+	console.log(`Loaded occupation: ${occupation.name}`);
+
+	const skillFiles = fs.readdirSync(`./data/occupations/${occupation.folder}`).filter(file => file.endsWith('.js'));
+	for (const skillFile of skillFiles) {
+		const skill = require(`./data/occupations/${occupation.folder}/${skillFile}`);
+		client.skills.set(skill.name, skill);
+		console.log(`Loaded skill: ${skill.name}`);
+	}
 }
 
 // Set up a cooldown timer
@@ -32,12 +49,11 @@ const cooldowns = new Discord.Collection();
 client.on('ready', async () => {
 	// Ready cache data
 	await cache.init();
-	console.log(`Cached ${cache.size} users from the database.`);
 
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on('message', (message) => {
+client.on('message', async (message) => {
 	if (message.author.bot) return;
 	if (!message.content.startsWith(prefix)) return;
 	if (message.channel.name !== DEFAULT_CHANNEL && message.channel.type !== 'dm') {
@@ -90,6 +106,9 @@ client.on('message', (message) => {
 		timestamps.set(message.author.id, now);
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 	}
+
+	// Make sure the user has the default skill for the current class
+	await cache.defaultSkill(message.member, message.channel);
 
 	// Execute the actual command
 	try {

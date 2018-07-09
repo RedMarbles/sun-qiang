@@ -8,13 +8,14 @@ A Discord bot that provides a battle arena for cultivators
 * faceslap - Execute an attack on a targeted person
 * reset - Resets the health and ammunition of everyone on the server
 
-## Battle:
+## Version 1 - Battle:
 Battle currently takes place in the form of a simple slap attack.  
 Each attack does a base damage of 10 HP, while each person starts with 100 HP as the base.  
 However, each person is only allowed 5 slaps.   
 
 On the other hand, there are 11 occupations currently available, and each occupation has certain combat multipliers against other occupations that give them increased offense or defense.  
 These occupations are based on some of the occupations from Library of Heaven's Path:  
+
 * Apothecary
 * Physician
 * Beast Tamer
@@ -26,3 +27,18 @@ These occupations are based on some of the occupations from Library of Heaven's 
 * Demonic Tunist
 * Blacksmith
 * Tea Master
+
+
+## Version 2 - Cultivation:
+
+Each player is able to gain experience separately in each of the 11 different roles. 
+Each role has a set of skills under it, and each skill can have various effects. One such effect is gaining exp from usage. Obtained exp is collected into the exp pool of the occupation or cultivation realm, and once a threshold is reached or conditions are met, they level up and go to the next level of the realm or occupation. Each time they level up, they are given a skill point and given the choice to unlock a new skill from that occupation's skill tree.
+
+Work Progress:
++ Added in a skill and occupation framework, so that using skills can raise exp of an occupation
+
+Work to do:
+* Consume stamina on skill use
+* Regenerate stamina over time
+* Set up separate cultivation and master teacher occupations and isolate them from the rest of the elements.
+* Item framework
