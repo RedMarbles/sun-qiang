@@ -11,7 +11,7 @@ module.exports = {
 	// (unused) Other skills that must be obtained before this skill can be unlocked
 	requirements: [],
 	// (unused) Whether the spell is active or passive
-	is_active: false,
+	is_active: true,
 	// The amount of stamina points needed to use this skill
 	stamina: 2,
 	// (unused) The amount of time before this skill can be used again (seconds)
@@ -27,8 +27,6 @@ module.exports = {
 		const skill_check = Math.random();
 
 		const DEFAULT_EXP = 1;
-
-		await cache.incrementSkillCount(message.author.id, 'gather_herbs');
 
 		// Failure condition
 		if (skill_check > SUCCESS_RATE) {
@@ -52,6 +50,5 @@ module.exports = {
 			.addField('Items Lost', 'N/A', true)
 			.addField('EXP gained', `${DEFAULT_EXP}`, true)
 			.addField('Apothecary EXP', cache.get(message.member.id).occupations.get('Apothecary').experience, true));
-
 	},
 };

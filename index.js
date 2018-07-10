@@ -47,7 +47,7 @@ for (const occFile of occupationFiles) {
 const update = async function() {
 	const promises = [];
 	cache.forEach((element, id) => {
-		promises.push( cache.addStats(id, { health: config.update_health, stamina: config.update_stamina }));
+		promises.push( cache.addStats(id, { health: config.update_health, stamina: config.update_stamina, slaps: 5-element.user.slaps }));
 	});
 	await Promise.all(promises);
 	setTimeout(update, config.update_delay*1000);
@@ -59,6 +59,8 @@ const cooldowns = new Discord.Collection();
 client.on('ready', async () => {
 	// Ready cache data
 	await cache.init();
+	cache.client = client;
+	console.log('Cache initialized');
 
 	console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -75,7 +77,7 @@ client.on('message', async (message) => {
 	const commandArgs = input.split(/ +/);
 	const commandName = commandArgs.shift();
 
-	// Find correct commad file while considering aliases
+	// Find correct command file while considering aliases
 	const command = client.commands.get(commandName)
 		|| client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
 	if (!command) return;
@@ -130,6 +132,6 @@ client.on('message', async (message) => {
 	}
 });
 
-client.login(config.token);
+client.login(config.token).catch(console.error);
 
 update();

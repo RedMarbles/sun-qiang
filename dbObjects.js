@@ -10,6 +10,8 @@ const Discord = require('discord.js');
 const { occupations: occupationsList } = require('./data/occupations.js');
 const colors = require('./data/colors.js');
 
+const { updateInfo } = require('./commands/info.js');
+
 const sequelize = new Sequelize('SQdatabase', 'TribeOfOne', 's3cur3_password', {
 	host: 'localhost',
 	dialect: 'sqlite',
@@ -32,21 +34,41 @@ const Skills = sequelize.import('models/Skills');
 // A cache to store all database links in memory
 const cache = new Discord.Collection();
 /*
-	cache =	[{
-		key: user_id,
-		value: {
-			user: user_database_entry,
-			occupations: [{
-				key: occupation_name,
-				value: occupation_database_entry,
-			}, ..., ],
-			skills: [{
-				key: skill_name,
-				value: skill_database_entry,
-			}, ..., ],
-			buffs: {},
-		},
-	}, ..., ]
+	cache =	{
+		client: discord_client_object
+		[{
+			key: user_id,
+			value: {
+				user: user_database_entry,
+				occupations: [{
+					key: occupation_name,
+					value: occupation_database_entry,
+				}, ..., ],
+				skills: [{
+					key: skill_name,
+					value: skill_database_entry,
+				}, ..., ],
+				buffs: {},
+				last_info: handle to the last $info message
+				last_message: the last message sent by the user
+			},
+		}, ..., ],
+		function init(),
+		function newUser(id),
+		function addStats(id, statsDiff),
+		function getStats(id),
+		function getOccupation(id, occName),
+		function setOccupation(id, occName, occNew),
+		function addOccupationExperience(message, occName, expGain),
+		function getSkillNames(id),
+		function getSkill(id, skillName),
+		function addSkill(id, occName, skillName, channel),
+		function removeSkill(id, skillName),
+		function incrementSkillCount(id, skillName),
+		function defaultSkill(member, channel),
+		function getRole(member),
+		function reset(),
+	}
 */
 
 // Load up the databases and save all data into the cache
@@ -81,6 +103,8 @@ cache.init = async function() {
 				occupations: occupations_,
 				skills: skills_,
 				buffs: {},
+				last_info: null,
+				last_message: null,
 			});
 		});
 
@@ -124,6 +148,8 @@ cache.newUser = async function(id) {
 			occupations: occupations_,
 			skills: new Discord.Collection(),
 			buffs: {},
+			last_info: null,
+			last_message: null,
 		});
 		console.log(`New user added to cache with id: ${id}`);
 		return this.get(id);
@@ -141,15 +167,17 @@ cache.addStats = async function(id, statsDiff) {
 		const element = this.get(id) || await this.newUser(id);
 		const user = element.user;
 		for (const stat_name in statsDiff) {
-			if (!user[stat_name]) return console.error(`ERROR [cache.addStats] - Attempted to access the stat named ${stat_name}`);
+			if (!user[stat_name]) return console.error(`ERROR [cache.addStats] - Attempted to access the stat named ${stat_name}`
+				+ `\n Username: ${cache.client.users.get(id).username}`);
 			user[stat_name] += statsDiff[stat_name];
 		}
 		if (user.health > user.health_max) user.health = user.health_max;
 		if (user.stamina > user.stamina_max) user.stamina = user.stamina_max;
-		return user.save();
+		await user.save();
+		updateInfo(id, this);
 	}
 	catch(error) {
-		return console.error(`ERROR [cache.addStats] - (id = ${id}, statsDiff = ${statsDiff}`);
+		return console.error(`ERROR [cache.addStats] - (id = ${id}, statsDiff = ${statsDiff} \n${error}`);
 	}
 };
 
@@ -190,7 +218,8 @@ cache.setOccupation = async function(id, occName, occNew) {
 			if (!occ[field]) return console.error(`ERROR [cache.setOccupation] - Attempted to access field ${field}`);
 			occ[field] = occNew[field];
 		}
-		return occ.save();
+		await occ.save();
+		updateInfo(id, this);
 	}
 	catch(error) {
 		return console.error(`ERROR [cache.setOccupation] - (id=${id}, occName=${occName}, occNew=${occNew} \n${error}`);
@@ -223,6 +252,7 @@ cache.addOccupationExperience = async function(message, occName, expGain) {
 			}));
 		}
 		await occupationCache.save();
+		updateInfo(message.member.id, this);
 		return true;
 	}
 	catch(error) {
@@ -288,6 +318,7 @@ cache.addSkill = async function(id, occName, skillName, channel) {
 			description: `**${user_member.displayName}** has learnt the ${occName} skill \`${skillName}\`!`,
 		}));
 
+		updateInfo(id, this);
 		return newSkill;
 	}
 	catch(error) {
@@ -344,10 +375,12 @@ cache.defaultSkill = async function(member, channel) {
 		const existingSkills = await this.getSkillNames(member.id);
 		if (existingSkills.includes(defaultSkillName)) return true;
 
-		return this.addSkill(member.id, roleName, defaultSkillName, channel);
+		const newSkill = this.addSkill(member.id, roleName, defaultSkillName, channel);
+		updateInfo(member.id, this);
+		return newSkill;
 	}
 	catch(error) {
-		return console.error(`ERROR [catch.defaultSkill] - \n${error}`);
+		return console.error(`ERROR [cache.defaultSkill] - (member: ${member.displayName}, role: ${roleName}) \n${error}`);
 	}
 };
 

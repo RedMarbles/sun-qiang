@@ -20,26 +20,17 @@ module.exports = {
 		{ level: 6, name: '6-star Apothecary', exp: 325000 },
 		{ level: 7, name: '7-star Apothecary', exp: 2000000 },
 		{ level: 8, name: '8-star Apothecary', exp: 12000000 },
-		{ level: 9, name: '9-star Apothecary', exp: 9e100 },
+		{ level: 9, name: '9-star Apothecary', exp: 9e16 },
 	],
 	// The names of the skills under this occupation
 	skills: [
-		{
-			name: 'gather_herbs',
-			file: './data/occupations/apothecary/gather_herbs.js',
-			level: 0,
-		},
-		{
-			name: 'forge_pill',
-			file: './data/occupations/apothecary/forge_pill.js',
-			level: 1,
-		},
-		{
-			name: 'plant_herb',
-			file: './data/occupations/apothecary/plant_herb.js',
-			level: 3,
-			// Allows planting a herb to harvest later (herbologist)
-		},
+		// Level 0
+		'gather_herbs',
+		// Level 1
+		'forge_pill',
+		'refine_herb',
+		// Level 2
+		'plant_herb',
 	],
 	// Checks if the user is eligible to level up
 	canLevelUp(message, cache) {

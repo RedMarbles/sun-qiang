@@ -27,7 +27,7 @@ module.exports = {
 			// TODO - Implement skill cooldown
 
 			const skill = message.client.skills.get(skillName);
-			const user = await cache.get(message.author.id);
+			const user = await cache.get(message.author.id).user;
 
 			// Checking for stamina
 			if ( user.stamina < skill.stamina ) {

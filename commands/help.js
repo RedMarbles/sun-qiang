@@ -33,7 +33,10 @@ module.exports = {
 			const name = args[0].toLowerCase();
 			const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
 			if (!command) {
-				return message.command.send(new Discord.RichEmbed({ color: colors.red, description: `${message.author}, That\'s not a valid command!`}));
+				return message.channel.send(new Discord.RichEmbed({ 
+					color: colors.red, 
+					description: `${message.author}, That\'s not a valid command!`,
+				}));
 			}
 
 			const embed = new Discord.RichEmbed({ color: colors.gray, title: 'Command help' });

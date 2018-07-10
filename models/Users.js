@@ -7,6 +7,7 @@
  * - slaps - (INT) number of slaps remaining for the day
  * - stamina - (INT) stamina points, used to execute active skills
  * - stamina_max - (INT) the maximum stamina for the character
+ * - spirit_stones - (INT) the amount of wealth of the character
  */
 
 module.exports = (sequelize, DataTypes) => {
@@ -38,6 +39,11 @@ module.exports = (sequelize, DataTypes) => {
 		stamina_max: {
 			type: DataTypes.INTEGER,
 			defaultValue: 10,
+			allowNull: false,
+		},
+		spirit_stones: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
 			allowNull: false,
 		},
 	}, {
