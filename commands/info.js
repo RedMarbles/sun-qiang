@@ -99,6 +99,10 @@ module.exports = {
 		else {
 			embed.setFooter('This message will auto-update with the user\'s stats');
 			cache.get(message.author.id).last_info = await message.author.send(embed);
+			message.channel.send(new Discord.RichEmbed({
+				color: colors.gray,
+				description: `${message.author}, I've sent you a DM with an auto-updating info tab`,
+			}));
 		}
 	},
 	async updateInfo(id, cache) {

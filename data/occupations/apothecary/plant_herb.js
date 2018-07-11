@@ -3,19 +3,19 @@ const colors = require('../../colors');
 
 module.exports = {
 	name: 'plant_herb',
-	description: 'Plant a refined herb from your inventory and feed it your energy. After an hour, it will bloom and return multiple times the planted yield',
+	description: 'Plant a refined herb from your inventory and feed it your energy. After half an hour, it will bloom and return multiple times the planted yield',
 	// The occupation to which this belongs
 	occupation: 'Apothecary',
-	// (unused) Minimum level at which this can be acquired
+	// Minimum level at which this can be acquired
 	min_level: 2,
-	// (unused) Other skills that must be obtained before this skill can be unlocked
+	// Other skills that must be obtained before this skill can be unlocked
 	requirements: ['refine_herb'],
 	// (unused) Whether the spell is active or passive
 	is_active: true,
 	// The amount of stamina points needed to use this skill
 	stamina: 15,
 	// (unused) The amount of time before this skill can be used again (seconds)
-	cooldown: 3600,
+	cooldown: 1800,
 	// Whether the skill can only be used when the user is currently in this occupation
 	occupation_locked: true,
 	// (unused) Whether this skill can only be used in battle

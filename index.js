@@ -69,7 +69,7 @@ client.on('message', async (message) => {
 	if (message.author.bot) return;
 	if (!message.content.startsWith(prefix)) return;
 	if (!message.channel.name.startsWith(DEFAULT_CHANNEL) && message.channel.type !== 'dm') {
-		return message.channel.send(`Sorry, Sun Qiang will only reply on the ${DEFAULT_CHANNEL} channel`);
+		return message.channel.send(`Sorry, Sun Qiang will only reply on the ${DEFAULT_CHANNEL} channels`);
 	}
 
 	const input = message.content.slice(prefix.length).trim();
@@ -85,6 +85,11 @@ client.on('message', async (message) => {
 	// Check if the command is a server-only command
 	if (command.guildOnly && message.channel.type !== 'text') {
 		return message.channel.send('Sorry, this command can only be used in a server text channel');
+	}
+
+	// Check if the command can only be used by a moderator or admin
+	if (command.modOnly && message.author.tag !== 'TribeOfOne#4217') {
+		return message.channel.send('Sorry, this command can only be used by the owner of this bot');
 	}
 
 	// Check if the command requires arguments

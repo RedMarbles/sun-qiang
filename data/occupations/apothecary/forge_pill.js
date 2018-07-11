@@ -6,9 +6,9 @@ module.exports = {
 	description: 'Forge a pill using the ingredients available to you',
 	// The occupation to which this belongs
 	occupation: 'Apothecary',
-	// (unused) Minimum level at which this can be acquired
+	// Minimum level at which this can be acquired
 	min_level: 1,
-	// (unused) Other skills that must be obtained before this skill can be unlocked
+	// Other skills that must be obtained before this skill can be unlocked
 	requirements: [],
 	// (unused) Whether the spell is active or passive
 	is_active: true,

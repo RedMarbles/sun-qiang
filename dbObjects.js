@@ -237,14 +237,17 @@ cache.addOccupationExperience = async function(message, occName, expGain) {
 	try{
 		const element = this.get(message.member.id) || await this.newUser(message.member.id);
 		const occupationCache = element.occupations.get(occName);
-		const occupationProps = message.client.occupations.get(occName);
+		const occupationInfo = message.client.occupations.get(occName);
+		if (!occupationCache || !occupationInfo) {
+			throw `Could not find occupation ${occName}!`;
+		}
 
 		// Add exp until it reaches the level cap
-		const expMax = occupationProps.exp_levels[occupationCache.level].exp;
+		const expMax = occupationInfo.exp_levels[occupationCache.level].exp;
 		occupationCache.experience = Math.min(occupationCache.experience + expGain, expMax);
 
 		// Check if the requirements are met to level up
-		if ((occupationCache.experience >= expMax) && (occupationProps.canLevelUp(message, this))) {
+		if ((occupationCache.experience >= expMax) && (occupationInfo.canLevelUp(message, this))) {
 			occupationCache.level += 1;
 			occupationCache.skill_points += 1;
 
