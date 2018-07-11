@@ -88,7 +88,7 @@ module.exports = {
 
 				const outputtext = [];
 				const occ = await cache.getOccupation(message.member.id, occName);
-				outputtext.push(`You have **${occ.skill_points} skill points** availble for **${occName}** skills.`);
+				outputtext.push(`You have **${occ.skill_points} skill point(s)** availble for **${occName}** skills.`);
 				outputtext.push('Skills you can unlock are:');
 
 				const obtainedSkills = await cache.getSkillNames(message.member.id);

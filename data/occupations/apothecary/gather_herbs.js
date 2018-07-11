@@ -33,7 +33,7 @@ module.exports = {
 			return message.channel.send(new RichEmbed({
 				color: colors.darkred,
 				title: `${message.member.displayName} is gathering herbs`,
-				description: 'You fumbled around in the woods for an hour but didn\' find anything other than embarassment.',
+				description: 'You fumbled around in the woods for an hour but didn\'t find anything other than embarassment.',
 			}).addField('Items Gained', 'N/A', true)
 				.addField('Items Lost', 'N/A', true)
 				.addField('EXP gained', '0', true)
