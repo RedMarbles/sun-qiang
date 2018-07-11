@@ -48,6 +48,10 @@ const cache = new Discord.Collection();
 					key: skill_name,
 					value: skill_database_entry,
 				}, ..., ],
+				cooldowns: [{
+					key: skill_name,
+					value: skill_expiry_time
+				}, ..., ]
 				buffs: {},
 				last_info: handle to the last $info message
 				last_message: the last message sent by the user
@@ -103,6 +107,7 @@ cache.init = async function() {
 				occupations: occupations_,
 				skills: skills_,
 				buffs: {},
+				cooldowns: new Discord.Collection(),
 				last_info: null,
 				last_message: null,
 			});
@@ -148,6 +153,7 @@ cache.newUser = async function(id) {
 			occupations: occupations_,
 			skills: new Discord.Collection(),
 			buffs: {},
+			cooldowns: new Discord.Collection(),
 			last_info: null,
 			last_message: null,
 		});

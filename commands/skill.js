@@ -1,7 +1,9 @@
 const { RichEmbed } = require('discord.js');
 
-const { occupations } = require('../data/occupations');
 const colors = require('../data/colors');
+
+// Default skill cooldown
+const DEFAULT_COOLDOWN = 5;
 
 module.exports = {
 	name: 'skill',
@@ -24,13 +26,12 @@ module.exports = {
 				}).setThumbnail(message.author.displayAvatarURL));
 			}
 
-			// TODO - Implement skill cooldown
-
 			const skill = message.client.skills.get(skillName);
-			const user = await cache.get(message.author.id).user;
+			const element = await cache.get(message.author.id);
+			const user = element.user;
 
 			// Checking for stamina
-			if ( user.stamina < skill.stamina ) {
+			if (user.stamina < skill.stamina) {
 				return message.channel.send(new RichEmbed({
 					color: colors.red,
 					title: 'Your right arm is weary',
@@ -38,18 +39,45 @@ module.exports = {
 				}));
 			}
 
-			if (skill.occupation_locked && (cache.getRole(message.member).name !== skill.occupation)) return message.channel.send(new RichEmbed({
-				color: colors.red,
-				title: 'You can\'t thread a needle with a hammer',
-				description: `Sorry **${message.member.displayName}**, but you need to have the ${skill.occupation} role to use the \`${skill.name}\` skill`,
-			}));
+			// Check if skill is occupation locked
+			if (skill.occupation_locked && (cache.getRole(message.member).name !== skill.occupation)) {
+				return message.channel.send(new RichEmbed({
+					color: colors.red,
+					title: 'You can\'t thread a needle with a hammer',
+					description: `Sorry **${message.member.displayName}**, but you need to have the ${skill.occupation} role to use the \`${skill.name}\` skill`,
+				}));
+			}
 
+			// Check if skill is on cooldown
+			if (element.cooldowns.has(skillName)) {
+				const remainingTime = (element.cooldowns.get(skillName) - Date.now()) / 1000;
+				// If cooldown is not yet over
+				if (remainingTime > 0) {
+					// Send the error message, then delete it after 6 seconds
+					return message.channel.send(new RichEmbed({
+						color: colors.red,
+						description: `${message.author}, the \`${skillName}\` command is still on cooldown for the next ${remainingTime.toFixed(1)} seconds`,
+					})).then(msg => msg.delete(6000));
+				}
+				// If cooldown is over but the timestamp wasn't deleted
+				element.cooldowns.delete(skillName);
+			}
+
+			// Add cooldown
+			const cooldownAmount = (skill.cooldown || DEFAULT_COOLDOWN) * 1000;
+			const expirationTime = Date.now() + cooldownAmount;
+			element.cooldowns.set(skillName, expirationTime);
+			setTimeout(() => element.cooldowns.delete(skillName), cooldownAmount);
+
+			// Execute the skill
 			skill.execute(message, args, cache);
+
+			// Update skill usage counter and stamina
 			await cache.incrementSkillCount(message.author.id, skillName);
 			await cache.addStats(message.author.id, { stamina: -skill.stamina });
 		}
 		catch(error) {
-			return console.log(`ERROR [command skill] - Unknown error - (skillname: ${skillName}) \n${error}`);
+			return console.log(`ERROR [command skill] - Unknown error - (args: [ ${args.join(' ')} ]) \n${error}`);
 		}
 	},
 };

@@ -14,7 +14,7 @@ module.exports = {
 	is_active: true,
 	// The amount of stamina points needed to use this skill
 	stamina: 15,
-	// (unused) The amount of time before this skill can be used again (seconds)
+	// The amount of time before this skill can be used again (seconds)
 	cooldown: 1800,
 	// Whether the skill can only be used when the user is currently in this occupation
 	occupation_locked: true,

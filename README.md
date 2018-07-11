@@ -46,6 +46,6 @@ Work to do:
 * Implement skill cooldown
 * Set up separate cultivation and master teacher occupations and isolate them from the rest of the elements.
 * Item framework
-* Stats framework - Base stats + passive skill stats + equipment stats + active skill/consumable stats
+* Stats framework - Base stats + passive skill stats + equipment stats + active skill/consumable stats - Strength, Soul Depth, Endurance
 * Battle framework
 * Marketplace framework for selling items to sink, as well as trading items between users (sell to market for 1/5th of base price, sell to user for 3/5th of base price, buy from user for 5/5th of base price)
