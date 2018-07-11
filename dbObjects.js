@@ -151,7 +151,7 @@ cache.newUser = async function(id) {
 			last_info: null,
 			last_message: null,
 		});
-		console.log(`New user added to cache with id: ${id}`);
+		console.log(`New user added to cache: ${cache.client.users.get(id).tag}`);
 		return this.get(id);
 	}
 	catch(error) {
@@ -167,8 +167,11 @@ cache.addStats = async function(id, statsDiff) {
 		const element = this.get(id) || await this.newUser(id);
 		const user = element.user;
 		for (const stat_name in statsDiff) {
-			if (!user[stat_name]) return console.error(`ERROR [cache.addStats] - Attempted to access the stat named ${stat_name}`
+			if (user.hasOwnProperty(stat_name)) {
+				console.error(`ERROR [cache.addStats] - Attempted to access the stat named ${stat_name}`
 				+ `\n Username: ${cache.client.users.get(id).username}`);
+				console.log('User data: ${user}');
+			}
 			user[stat_name] += statsDiff[stat_name];
 		}
 		if (user.health > user.health_max) user.health = user.health_max;

@@ -93,12 +93,12 @@ module.exports = {
 
 		// If it is information about another user, send the message to the text channel
 		if (!infoSelf) {
-			cache.get(message.author.id).last_info = await message.channel.send(embed);
+			await message.channel.send(embed);
 		}
 		// If it is information about the user, send message to DM
 		else {
 			embed.setFooter('This message will auto-update with the user\'s stats');
-			await message.author.send(embed);
+			cache.get(message.author.id).last_info = await message.author.send(embed);
 		}
 	},
 	async updateInfo(id, cache) {
