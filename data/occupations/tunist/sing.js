@@ -32,7 +32,7 @@ module.exports = {
 		if (skill_check > SUCCESS_RATE) {
 			return message.channel.send(new RichEmbed({
 				color: colors.darkred,
-				title: `${message.member.displayName} is singing their heart out`,
+				title: `${message.member.displayName} is singing about love and loss and pizza`,
 				description: 'You try to sing a note an octave higher than you can reach and end up causing a nearby bird to bleed to death from its eardrums',
 			}).addField('EXP gained', '0', true)
 				.addField('Demonic Tunist EXP', cache.get(message.member.id).occupations.get('Demonic Tunist').experience, true));
@@ -42,7 +42,7 @@ module.exports = {
 		await cache.addOccupationExperience(message, 'Demonic Tunist', DEFAULT_EXP);
 		return message.channel.send(new RichEmbed({
 			color: colors.green,
-			title: `${message.member.displayName} is singing their heart out`,
+			title: `${message.member.displayName} is singing about love and loss and pizza`,
 			description: 'After singing for about an hour, you feel satisfied with the knowledge that you can crush your peers in karaoke.',
 		}).addField('EXP gained', `${DEFAULT_EXP}`, true)
 			.addField('Demonic Tunist EXP', cache.get(message.member.id).occupations.get('Demonic Tunist').experience, true));
