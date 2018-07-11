@@ -68,7 +68,7 @@ client.on('ready', async () => {
 client.on('message', async (message) => {
 	if (message.author.bot) return;
 	if (!message.content.startsWith(prefix)) return;
-	if (message.channel.name !== DEFAULT_CHANNEL && message.channel.type !== 'dm') {
+	if (!message.channel.name.startsWith(DEFAULT_CHANNEL) && message.channel.type !== 'dm') {
 		return message.channel.send(`Sorry, Sun Qiang will only reply on the ${DEFAULT_CHANNEL} channel`);
 	}
 
