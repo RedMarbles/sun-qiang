@@ -254,7 +254,8 @@ cache.addOccupationExperience = async function(message, occName, expGain) {
 			return message.channel.send(new Discord.RichEmbed({
 				color: colors.blue,
 				title: ':notes: TA TA TA TAAAAA :musical_note:',
-				description: `**${message.member.displayName}** broke past their bottleneck and became a **${occupationProps.exp_levels[occupationCache.level].name}**!`,
+				description: `**${message.member.displayName}** broke past their bottleneck and became a **${occupationProps.exp_levels[occupationCache.level].name}**!`
+					+ `\n You have gained 1 skill point for learning a new ${occName} skill!`,
 			}));
 		}
 		await occupationCache.save();
