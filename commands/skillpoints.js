@@ -1,6 +1,14 @@
 const { RichEmbed } = require('discord.js');
 const colors = require('../data/colors.js');
+const { occupations } = require('../data/occupations.js');
 const { prefix } = require('../config.json');
+
+function findOccupationName(input) {
+	const input_ = input.toLowerCase();
+	const occName = occupations.find(occ => (input_ === occ.name.toLowerCase()) || occ.alias.map(a => a.toLowerCase()).includes(input_));
+	// If an occupation could not be found, return the input for further processing
+	return occName.name || input;
+}
 
 module.exports = {
 	name: 'skillpoints',
@@ -77,7 +85,7 @@ module.exports = {
 
 			// Argument is the occupation name
 			else if(args[0] === 'check') {
-				const occName = args.slice(1).join(' ');
+				const occName = findOccupationName(args.slice(1).join(' '));
 				if (!message.client.occupations.has(occName)) {
 					return message.channel.send(new RichEmbed({
 						color: colors.red,
