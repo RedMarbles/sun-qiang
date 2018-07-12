@@ -40,10 +40,10 @@ Work Progress:
 + Regenerate stamina over time
 + Info command now shows skill and occupation information instead of attribute matchups
 + Info message -> dm + auto-update
++ Implement skill cooldown
 
 Work to do:
 * Interface class for sending messages
-* Implement skill cooldown
 * Set up separate cultivation and master teacher occupations and isolate them from the rest of the elements.
 * Item framework
 * Stats framework - Base stats + passive skill stats + equipment stats + active skill/consumable stats - Strength, Soul Depth, Endurance
