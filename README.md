@@ -49,3 +49,4 @@ Work to do:
 * Stats framework - Base stats + passive skill stats + equipment stats + active skill/consumable stats - Strength, Soul Depth, Endurance
 * Battle framework
 * Marketplace framework for selling items to sink, as well as trading items between users (sell to market for 1/5th of base price, sell to user for 3/5th of base price, buy from user for 5/5th of base price)
+* Battle skill & Battle item - Only 4 skills and 4 items can be carried into battle. Needs database field to record.
