@@ -4,15 +4,17 @@ const { occupations } = require('../data/occupations');
 const colors = require('../data/colors');
 const { prefix } = require('../config');
 
-async function changeRole(oldRole, newRole, message) {
+async function changeRole(oldRole, newRole, message, cache) {
 	if (!newRole) {
-		return message.channel.send('Sorry, this server doesn\'t seem to have that role available.');
+		message.channel.send('Sorry, this server doesn\'t seem to have that role available.');
+		return false;
 	}
 	if (oldRole) {
 		await message.member.removeRole(oldRole.id);
 	}
 	await message.member.addRole(newRole.id);
 	message.channel.send(new Discord.RichEmbed({ color: colors.gray, description: `${message.author} has become a **${newRole.name}**!` }));
+	await cache.defaultSkill(message.member, message.channel, newRole.name);
 	return true;
 }
 
@@ -31,17 +33,16 @@ module.exports = {
 	guildOnly: true,
 	cooldown: 5,
 	async execute(message, args, cache) {
-		// Extact the current occupation of the user, or set as 'Unemployed' if no role is found
-		const oldRole = message.member.roles.find(r => occupations.map(occ => occ.name).includes(r.name)) || { name: 'Unemployed' };
+		// Extact the current occupation of the user
+		const oldRole = cache.getRole(message.member);
 		let newRole = undefined;
 
-		await cache.defaultSkill(message.member, message.channel);
+		if (oldRole) await cache.defaultSkill(message.member, message.channel, oldRole.name);
 
 		// If there was an argument, compare against the occupations and aliases to find the correct new occupation
 		if (args.length) {
 			newRole = findOccupation(args.join(' ').toLowerCase(), message);
-			await changeRole(oldRole, newRole, message);
-			await cache.defaultSkill(message.member, message.channel);
+			await changeRole(oldRole, newRole, message, cache);
 		}
 		// If there was no argument, provide a list of occupations to choose from
 		else {
@@ -58,7 +59,7 @@ module.exports = {
 
 			// Create a collector to get the response from the user
 			const filter = m => (m.author.id === message.author.id);
-			const collector = message.channel.createMessageCollector(filter, { time: 10000 });
+			const collector = message.channel.createMessageCollector(filter, { time: 20000 });
 			collector.on('collect', async (m) => {
 				if (m.content.startsWith(prefix)) return collector.stop();
 
@@ -69,15 +70,14 @@ module.exports = {
 					}
 					const newOccupation = occupations[n + 1];
 					newRole = message.guild.roles.find(r => r.name === newOccupation.name);
-					await changeRole(oldRole, newRole, message);
-					cache.defaultSkill(message.member, message.channel);
+					await changeRole(oldRole, newRole, message, cache);
 					collector.stop();
 					return;
 				}
 
+				// If the option isn't a number but a string
 				newRole = findOccupation(m.content.trim().toLowerCase(), message);
-				if (await changeRole(oldRole, newRole, message)) {
-					await cache.defaultSkill(message.member, message.channel);
+				if (await changeRole(oldRole, newRole, message, cache)) {
 					collector.stop();
 				}
 			});

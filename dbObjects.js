@@ -381,14 +381,17 @@ cache.incrementSkillCount = async function(id, skillName) {
 // Automatically add the default skill of the current occupation to the user
 // * member - (GUILDMEMBER) the user's guild member object
 // * channel - (CHANNEL) the channel where the message should be published
-cache.defaultSkill = async function(member, channel) {
+cache.defaultSkill = async function(member, channel, roleName) {
 	try {
-		const roleName = this.getRole(member).name;
+		// const roleName = this.getRole(member).name;
+		if (!occupationsList.map(occ => occ.name).includes(roleName)) {
+			throw `Role ${roleName} not found`;
+		}
 		const defaultSkillName = member.client.occupations.get(roleName).default_skill;
 		const existingSkills = await this.getSkillNames(member.id);
 		if (existingSkills.includes(defaultSkillName)) return true;
 
-		const newSkill = this.addSkill(member.id, roleName, defaultSkillName, channel);
+		const newSkill = await this.addSkill(member.id, roleName, defaultSkillName, channel);
 		updateInfo(member.id, this);
 		return newSkill;
 	}

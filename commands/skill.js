@@ -35,7 +35,8 @@ module.exports = {
 				return message.channel.send(new RichEmbed({
 					color: colors.red,
 					title: 'Your right arm is weary',
-					description: `Sorry **${message.member.displayName}**, you do not have enough stamina to use that skill`,
+					description: `Sorry **${message.member.displayName}**, you do not have enough stamina to use that skill`
+						+ '\nYou can either wait for your stamina to refill or use an item to gain it back',
 				}));
 			}
 

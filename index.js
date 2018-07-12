@@ -16,6 +16,8 @@ const { prefix } = config;
 
 const { cache, Users, Occupations } = require('./dbObjects');
 
+const colors = require('./data/colors.js');
+
 const client = new Discord.Client();
 
 // Set up the command handler files
@@ -124,8 +126,10 @@ client.on('message', async (message) => {
 		setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 	}
 
+	// Check if user has a role yet
+	const role = cache.getRole(message.member);
 	// Make sure the user has the default skill for the current class
-	await cache.defaultSkill(message.member, message.channel);
+	if (role) await cache.defaultSkill(message.member, message.channel, role.name);
 
 	// Execute the actual command
 	try {

@@ -5,18 +5,18 @@ const { occupations } = require('../data/occupations');
 const colors = require('../data/colors');
 
 async function generateEmbed(message, target, cache) {
-	const role = target.roles.find(r => occupations.map(occ => occ.name).includes(r.name));
+	const role = cache.getRole(target);
 	const { health, health_max, slaps, stamina, stamina_max } = await cache.getStats(target.id);
 
 	// Make sure the user has the default skill for the current class
-	cache.defaultSkill(target, message.channel);
+	if (role) await cache.defaultSkill(target, message.channel, role.name);
 
 	const embed = new Discord.RichEmbed({
 		color: colors.gray,
 	});
 	embed.setThumbnail(target.user.displayAvatarURL);
 	embed.addField('Username', target.displayName, true);
-	embed.addField('Occupation', role.name, true);
+	embed.addField('Occupation', (role) ? role.name : 'Unemployed' , true);
 	embed.addField('Health', `${health}/${health_max} HP`, true);
 	embed.addField('Stamina', `${stamina}/${stamina_max} SP`, true);
 
@@ -27,14 +27,16 @@ async function generateEmbed(message, target, cache) {
 		// Exp and skill points info
 		const { experience, level, skill_points } = await cache.getOccupation(target.id, occName);
 		const experience_max = occData.exp_levels[level].exp;
-		occinfo.push(`EXP : ${experience}/${experience_max}`);
-		occinfo.push(`Skill Points: ${skill_points}`);
 
-		// Skill info
+		// Skill info (do not print occupation information unless the character has a skill in that occupation)
 		const skillinfo = [];
 		occData.skills.forEach(element => {
 			if (obtainedSkills.includes(element)) skillinfo.push(`\`${element}\``);
 		});
+		if (!skillinfo.length) return;
+
+		occinfo.push(`EXP : ${experience}/${experience_max}`);
+		occinfo.push(`Skill Points: ${skill_points}`);
 		occinfo.push('Skills: ' + skillinfo.join(', '));
 
 		embed.addField(occData.exp_levels[level].name, occinfo.join('\n'), true);
