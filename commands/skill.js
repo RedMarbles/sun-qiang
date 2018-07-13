@@ -70,12 +70,12 @@ module.exports = {
 			element.cooldowns.set(skillName, expirationTime);
 			setTimeout(() => element.cooldowns.delete(skillName), cooldownAmount);
 
-			// Execute the skill
-			skill.execute(message, args, cache);
-
 			// Update skill usage counter and stamina
 			await cache.incrementSkillCount(message.author.id, skillName);
 			await cache.addStats(message.author.id, { stamina: -skill.stamina });
+
+			// Execute the skill
+			await skill.execute(message, args, cache);
 		}
 		catch(error) {
 			return console.log(`ERROR [command skill] - Unknown error - (args: [ ${args.join(' ')} ]) \n${error}`);

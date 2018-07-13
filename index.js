@@ -31,19 +31,19 @@ client.occupations = new Discord.Collection();
 client.skills = new Discord.Collection();
 // const occupationFiles = fs.readdirSync('./data/occupations').filter(file => file.endsWith('.js'));
 // Directly specify the files so that the order of occupations is preserved
-const occupationFiles = [ 'Cultivation.js',
-	// 'Master Teacher.js',
-	'Apothecary.js',
-	// 'Physician',
-	// 'Beast Tamer',
-	// 'Formation Master',
-	// 'Soul Oracle',
-	// 'Celestial Designer',
-	// 'Poison Master',
-	// 'Painter',
-	'Demonic Tunist',
-	// 'Blacksmith',
-	// 'Tea Master',
+const occupationFiles = [ 'cultivation.js',
+	// 'master_teacher.js',
+	'apothecary.js',
+	// 'physician.js',
+	// 'beast.js',
+	// 'formation.js',
+	// 'souloracle.js',
+	// 'celestialdesigner.js',
+	// 'poison Master.js',
+	// 'painter.js',
+	'tunist.js',
+	// 'blacksmith.js',
+	// 'tea.js',
 ];
 for (const occFile of occupationFiles) {
 	const occupation = require(`./data/occupations/${occFile}`);
