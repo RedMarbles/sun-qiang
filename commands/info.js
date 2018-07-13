@@ -34,7 +34,7 @@ async function generateEmbed(message, target, cache) {
 		});
 		if (!skillinfo.length) return;
 
-		occinfo.push(`Occupation: ${occData.name}`);
+		occinfo.push(`Category: ${occData.name}`);
 		occinfo.push(`EXP : ${experience}/${experience_max}`);
 		occinfo.push(`Skill Points: ${skill_points}`);
 		occinfo.push('Skills: ' + skillinfo.join(', '));

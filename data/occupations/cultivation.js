@@ -32,6 +32,7 @@ module.exports = {
 		// Level 2 - Dantian
 		// 'enhanced_stamina',
 		// 'focus_energy',
+		// 'halo_of_hostility' - (passive) every time you perform an action involving another player, you are likely to aggravate them and initiate combat. Grants bonus EXP and extra chance to succeed in subsequent skills.
 	],
 	// Checks if the user is eligible to level up
 	canLevelUp(message, cache) {
@@ -42,13 +43,13 @@ module.exports = {
 		const requirements = [];
 
 		if ((level < 18) && (exp >= this.exp_levels[level].exp)) {
-			cache.addStats(message.member.id, { health_max: 20, stamina_max: 4 });
-			message.channel.send(new RichEmbed({
-				color: colors.blue,
-				title: `${message.member.displayName}, you have permanently gained stats`,
-				description: 'Max Health: +20 HP'
-					+ '\nMax Stamina: +4 SP',
-			}));
+			// cache.addStats(message.member.id, { health_max: 20, stamina_max: 4 });
+			// message.channel.send(new RichEmbed({
+			// 	color: colors.blue,
+			// 	title: `${message.member.displayName}, you have permanently gained stats`,
+			// 	description: 'Max Health: +20 HP'
+			// 		+ '\nMax Stamina: +4 SP',
+			// }));
 			return true;
 		}
 

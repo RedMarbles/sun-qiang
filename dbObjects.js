@@ -173,10 +173,11 @@ cache.addStats = async function(id, statsDiff) {
 		const element = this.get(id) || await this.newUser(id);
 		const user = element.user;
 		for (const stat_name in statsDiff) {
-			if (user.hasOwnProperty(stat_name)) {
+			if (user[stat_name] === undefined) {
 				console.error(`ERROR [cache.addStats] - Attempted to access the stat named ${stat_name}`
 				+ `\n Username: ${cache.client.users.get(id).username}`);
-				console.log('User data: ${user}');
+				// console.log('User data: ${user}');
+				return;
 			}
 			user[stat_name] += statsDiff[stat_name];
 		}
@@ -224,7 +225,10 @@ cache.setOccupation = async function(id, occName, occNew) {
 		const element = this.get(id) || await this.newUser(id);
 		const occ = element.occupations.get(occName);
 		for (const field in occNew) {
-			if (!occ[field]) return console.error(`ERROR [cache.setOccupation] - Attempted to access field ${field}`);
+			if (occ[field] === undefined) {
+				return console.error(`ERROR [cache.setOccupation] - Attempted to access field ${field}`);
+				return;
+			}
 			occ[field] = occNew[field];
 		}
 		await occ.save();
@@ -257,11 +261,30 @@ cache.addOccupationExperience = async function(message, occName, expGain) {
 			occupationCache.level += 1;
 			occupationCache.skill_points += 1;
 
-			return message.channel.send(new Discord.RichEmbed({
+			const output = [];
+			output.push(`**${message.member.displayName}** broke past their bottleneck and became a **${occupationInfo.exp_levels[occupationCache.level].name}**!`);
+			output.push(` You have gained 1 skill point for learning a new ${occName} skill!`);
+
+			// Make list of new skills to learn
+			const skillNames = [];
+			cache.client.skills.forEach((skill, skillName) => {
+				if ((skill.occupation === occName) && (skill.min_level === occupationCache.level)) {
+					skillNames.push(`\`${skillName}\``);
+				}
+			});
+			output.push(`New skills available for unlocking: [ ${skillNames.join(', ')} ]`);
+
+			if (occName === 'Cultivation') {
+				cache.addStats(message.member.id, { health_max: 20, stamina_max: 4 });
+				output.push('You have permanently gained stats:');
+				output.push(' - Max Health: +20 HP');
+				output.push(' - Max Stamina: +4 SP');
+			}
+
+			message.channel.send(new Discord.RichEmbed({
 				color: colors.blue,
 				title: ':notes: TA TA TA TAAAAA :musical_note:',
-				description: `**${message.member.displayName}** broke past their bottleneck and became a **${occupationInfo.exp_levels[occupationCache.level].name}**!`
-					+ `\n You have gained 1 skill point for learning a new ${occName} skill!`,
+				description: output.join('\n'),
 			}));
 		}
 		await occupationCache.save();

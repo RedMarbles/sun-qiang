@@ -52,7 +52,7 @@ module.exports = {
 		const successLines = [
 			'You gain enlightenment of the answer to life, the universe and everything (it\'s somewhere between 41 and 43 by your best estimates), and progress in your cultivation thanks to that.',
 			'The smell of that freshly baked pizza wafting in through the window drives you through your LSD-fuelled trance and opens your mind to a whole new world, giving you a boost to your cultivation.',
-			'You fell asleep while meditating, but Keanu Reeves suddenly passes by, and he enters the matrix and changes the source code of the bot to increase your cultivation',
+			'You fall asleep while meditating, but Keanu Reeves suddenly passes by. He takes a linking to you, so he enters the matrix and changes the source code of the bot to increase your cultivation',
 			'You begin to dream of today morning, when you saw a shirtless Sun Qiang bathing in the courtyard, and you come to understand the enlightenment and glory of the fat buddha.',
 			'As you sit and meditate, you drive your zhenqi through your meridians as you accumulate more spiritual energy from the surroundings.',
 			'As you sit and meditate, you drive your zhenqi through your meridians as you accumulate more spiritual energy from the surroundings.',
