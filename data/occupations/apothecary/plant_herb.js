@@ -11,14 +11,14 @@ module.exports = {
 	// Other skills that must be obtained before this skill can be unlocked
 	requirements: ['refine_herb'],
 	// (unused) Whether the spell is active or passive
-	is_active: true,
+	is_active: 'active',
 	// The amount of stamina points needed to use this skill
 	stamina: 15,
 	// The amount of time before this skill can be used again (seconds)
 	cooldown: 1800,
 	// Whether the skill can only be used when the user is currently in this occupation
 	occupation_locked: true,
-	// (unused) Whether this skill can only be used in battle
+	// (unused) Whether this skill can be used in battle
 	battle_skill: false,
 	// Actual execution of the skill
 	async execute(message, args, cache) {

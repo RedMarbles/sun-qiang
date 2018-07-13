@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 
-const { occupations } = require('../data/occupations');
 // const { attributes } = require('../data/occupations');
 const colors = require('../data/colors');
 
@@ -16,7 +15,7 @@ async function generateEmbed(message, target, cache) {
 	});
 	embed.setThumbnail(target.user.displayAvatarURL);
 	embed.addField('Username', target.displayName, true);
-	embed.addField('Occupation', (role) ? role.name : 'Unemployed' , true);
+	embed.addField('Occupation', (role) ? role.name : 'Unemployed', true);
 	embed.addField('Health', `${health}/${health_max} HP`, true);
 	embed.addField('Stamina', `${stamina}/${stamina_max} SP`, true);
 
@@ -112,7 +111,7 @@ module.exports = {
 			const last_info = cache.get(id).last_info;
 			const last_message = cache.get(id).last_message;
 			if (!last_info) return;
-			if (!last_message) return console.log(`ERROR [command info.updateInfo] - last_message not defined`);
+			if (!last_message) throw 'last_message not defined';
 			const member = last_message.channel.members.get(id);
 			const embed = await generateEmbed(last_message, member, cache);
 			embed.setFooter('This message will auto-update with the user\'s stats');

@@ -135,7 +135,7 @@ module.exports = {
 				const requiredSkills = '`' + skill.requirements.join('`, `') + '`';
 				embed.addField('Skill Requirements', requiredSkills, true);
 				embed.addField('Skill Description', skill.description, false);
-				embed.addField('Activation', (skill.is_active) ? 'Active skill' : 'Passive skill', true);
+				embed.addField('Activation', `${skill.is_active} skill`, true);
 				embed.addField('Stamina Comsumption', `${skill.stamina} SP`, true);
 				embed.addField('Cooldown', `${skill.cooldown} seconds`, true);
 				embed.addField('Combat Skill', skill.battle_skill, true);

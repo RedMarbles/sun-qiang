@@ -11,7 +11,7 @@ module.exports = {
 	default_skill: 'sing',
 	// The levels and their exp requirements of the occupation
 	exp_levels: [
-		{ level: 0, name: 'Apprentice Tunist', exp: 10},
+		{ level: 0, name: 'Apprentice Tunist', exp: 10 },
 		{ level: 1, name: '1-star Demonic Tunist', exp: 50 },
 		{ level: 2, name: '2-star Demonic Tunist', exp: 300 },
 		{ level: 3, name: '3-star Demonic Tunist', exp: 1500 },
@@ -38,6 +38,8 @@ module.exports = {
 		const exp = element.occupations.get('Demonic Tunist').experience;
 		const level = element.occupations.get('Demonic Tunist').level;
 
+		const requirements = [];
+
 		if ((level < 9) && (exp >= this.exp_levels[level].exp)) {
 			return true;
 		}
@@ -46,7 +48,7 @@ module.exports = {
 			color: colors.darkblue,
 			title: 'Bottleneck Ahoy!',
 			description: `${message.member.displayName}, you've reached a bottleneck in your progression along the path of the Demonic Tunist. The requirements to pass the bottleneck are:`,
-		}).addField('Cultivation','',true));
+		}).addField('Requirements', requirements.join('\n'), true));
 		return false;
-	}
+	},
 };

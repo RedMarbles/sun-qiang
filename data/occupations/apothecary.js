@@ -11,7 +11,7 @@ module.exports = {
 	default_skill: 'gather_herbs',
 	// The levels and their exp requirements of the occupation
 	exp_levels: [
-		{ level: 0, name: 'Apprentice Apothecary', exp: 10},
+		{ level: 0, name: 'Apprentice Apothecary', exp: 10 },
 		{ level: 1, name: '1-star Apothecary', exp: 50 },
 		{ level: 2, name: '2-star Apothecary', exp: 300 },
 		{ level: 3, name: '3-star Apothecary', exp: 1500 },
@@ -38,6 +38,8 @@ module.exports = {
 		const exp = element.occupations.get('Apothecary').experience;
 		const level = element.occupations.get('Apothecary').level;
 
+		const requirements = [];
+
 		if ((level < 9) && (exp >= this.exp_levels[level].exp)) {
 			return true;
 		}
@@ -46,7 +48,7 @@ module.exports = {
 			color: colors.darkblue,
 			title: 'Bottleneck Ahoy!',
 			description: `${message.member.displayName}, you've reached a bottleneck in your progression along the path of the Apothecary. The requirements to pass the bottleneck are:`,
-		}).addField('Cultivation','',true));
+		}).addField('Requirements', requirements.join('\n'), true));
 		return false;
-	}
+	},
 };

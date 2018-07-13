@@ -1,8 +1,6 @@
 // Main file for launching the bot
 
 const DEFAULT_COOLDOWN = 3;
-const DEFAULT_HEALTH = 100;
-const DEFAULT_SLAPS = 5;
 const DEFAULT_CHANNEL = 'faceslap';
 
 // The Discord API
@@ -14,9 +12,9 @@ const fs = require('fs');
 const config = require('./config.json');
 const { prefix } = config;
 
-const { cache, Users, Occupations } = require('./dbObjects');
+const { cache } = require('./dbObjects');
 
-const colors = require('./data/colors.js');
+// const colors = require('./data/colors.js');
 
 const client = new Discord.Client();
 
@@ -31,7 +29,22 @@ for (const file of commandFiles) {
 // Set up the occupation and skill handler files
 client.occupations = new Discord.Collection();
 client.skills = new Discord.Collection();
-const occupationFiles = fs.readdirSync('./data/occupations').filter(file => file.endsWith('.js'));
+// const occupationFiles = fs.readdirSync('./data/occupations').filter(file => file.endsWith('.js'));
+// Directly specify the files so that the order of occupations is preserved
+const occupationFiles = [ 'Cultivation.js',
+	// 'Master Teacher.js',
+	'Apothecary.js',
+	// 'Physician',
+	// 'Beast Tamer',
+	// 'Formation Master',
+	// 'Soul Oracle',
+	// 'Celestial Designer',
+	// 'Poison Master',
+	// 'Painter',
+	'Demonic Tunist',
+	// 'Blacksmith',
+	// 'Tea Master',
+];
 for (const occFile of occupationFiles) {
 	const occupation = require(`./data/occupations/${occFile}`);
 	client.occupations.set(occupation.name, occupation);
@@ -49,11 +62,11 @@ for (const occFile of occupationFiles) {
 const update = async function() {
 	const promises = [];
 	cache.forEach((element, id) => {
-		promises.push( cache.addStats(id, { health: config.update_health, stamina: config.update_stamina, slaps: 5-element.user.slaps }));
+		promises.push(cache.addStats(id, { health: config.update_health, stamina: config.update_stamina, slaps: 5 - element.user.slaps }));
 	});
 	await Promise.all(promises);
-	setTimeout(update, config.update_delay*1000);
-}
+	setTimeout(update, config.update_delay * 1000);
+};
 
 // Set up a cooldown timer
 const cooldowns = new Discord.Collection();
@@ -119,7 +132,8 @@ client.on('message', async (message) => {
 		const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 		if (now < expirationTime) {
 			const timeLeft = (expirationTime - now) / 1000;
-			return message.reply(`Please wait ${timeLeft.toFixed(1)} more seconds before reusing the \`${command.name}\` command.`);
+			return (await message.reply(`Please wait ${timeLeft.toFixed(1)} more seconds before reusing the \`${command.name}\` command.`))
+				.delete(Math.max(expirationTime - now, 2000));
 		}
 		// User is not on cooldown, but their entry wasn't deleted yet
 		timestamps.set(message.author.id, now);
@@ -130,6 +144,7 @@ client.on('message', async (message) => {
 	const role = cache.getRole(message.member);
 	// Make sure the user has the default skill for the current class
 	if (role) await cache.defaultSkill(message.member, message.channel, role.name);
+	await cache.defaultSkill(message.member, message.channel, 'Cultivation');
 
 	// Execute the actual command
 	try {
