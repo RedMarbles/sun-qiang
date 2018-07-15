@@ -3,6 +3,7 @@
 const DEFAULT_HEALTH = 100;
 const DEFAULT_STAMINA = 10;
 const DEFAULT_SLAPS = 5;
+const DEFAULT_SOUL_DEPTH = 0.2;
 
 const Sequelize = require('sequelize');
 const Discord = require('discord.js');
@@ -128,9 +129,14 @@ cache.newUser = async function(id) {
 			user_id: id,
 			health: DEFAULT_HEALTH,
 			health_max: DEFAULT_HEALTH,
-			slaps: DEFAULT_SLAPS,
 			stamina: DEFAULT_STAMINA,
 			stamina_max: DEFAULT_STAMINA,
+			soul_depth: DEFAULT_SOUL_DEPTH,
+			soul_depth_max: DEFAULT_SOUL_DEPTH,
+			curr_gold: 0,
+			curr_low: 0,
+			curr_med: 0,
+			curr_high: 0,
 		});
 		console.log('New user created');
 
@@ -183,6 +189,7 @@ cache.addStats = async function(id, statsDiff) {
 		}
 		if (user.health > user.health_max) user.health = user.health_max;
 		if (user.stamina > user.stamina_max) user.stamina = user.stamina_max;
+		if (user.soul_depth > user.soul_depth_max) user.soul_depth = user.soul_depth_max;
 		await user.save();
 		updateInfo(id, this);
 	}
@@ -275,10 +282,11 @@ cache.addOccupationExperience = async function(message, occName, expGain) {
 			output.push(`New skills available for unlocking: [ ${skillNames.join(', ')} ]`);
 
 			if (occName === 'Cultivation') {
-				cache.addStats(message.member.id, { health_max: 20, stamina_max: 4 });
+				cache.addStats(message.member.id, { health_max: 20, stamina_max: 4, soul_depth_max: 0.2 });
 				output.push('You have permanently gained stats:');
 				output.push(' - Max Health: +20 HP');
 				output.push(' - Max Stamina: +4 SP');
+				output.push(' - Max Soul Depth: +0.2');
 			}
 
 			message.channel.send(new Discord.RichEmbed({

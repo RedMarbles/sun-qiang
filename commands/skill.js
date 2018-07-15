@@ -35,8 +35,18 @@ module.exports = {
 				return message.channel.send(new RichEmbed({
 					color: colors.red,
 					title: 'Your right arm is weary',
-					description: `Sorry **${message.member.displayName}**, you do not have enough stamina to use that skill`
-						+ '\nYou can either wait for your stamina to refill or use an item to gain it back',
+					description: `Sorry **${message.member.displayName}**, you do not have enough *stamina* to use that skill`
+						+ '\nYou can either wait for your stamina to refill or use an item to recover quickly',
+				}));
+			}
+
+			// Checking for soul depth
+			if ((skill.soul_depth !== undefined) && (user.soul_depth < skill.soul_depth)) {
+				return message.channel.send(new RichEmbed({
+					color: colors.red,
+					title: 'Your imagination is weary',
+					description: `Sorry **${message.member.displayName}**, you do not have enough *soul depth* to use that skill`
+						+ '\nYou can either wait for your soul depth to refill or use an item to recover quickly',
 				}));
 			}
 
@@ -72,7 +82,8 @@ module.exports = {
 
 			// Update skill usage counter and stamina
 			await cache.incrementSkillCount(message.author.id, skillName);
-			await cache.addStats(message.author.id, { stamina: -skill.stamina });
+			const soulUsage = (user.soul_depth !== undefined) ? user.soul_depth : 0;
+			await cache.addStats(message.author.id, { stamina: -skill.stamina, soul_depth: -soulUsage });
 
 			// Execute the skill
 			await skill.execute(message, args, cache);

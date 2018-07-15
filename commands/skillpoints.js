@@ -137,6 +137,7 @@ module.exports = {
 				embed.addField('Skill Description', skill.description, false);
 				embed.addField('Activation', `${skill.is_active} skill`, true);
 				embed.addField('Stamina Comsumption', `${skill.stamina} SP`, true);
+				embed.addField('Soul Depth Consumption', `${(skill.soul_depth === undefined) ? 0 : skill.soul_depth.toFixed(1)}`, true);
 				embed.addField('Cooldown', `${skill.cooldown} seconds`, true);
 				embed.addField('Combat Skill', skill.battle_skill, true);
 				embed.addField('Usage Restrictions', (skill.occupation_locked) ? `Only usable by the ${occ.name} role` : 'None');

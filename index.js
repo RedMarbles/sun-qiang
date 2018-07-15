@@ -62,7 +62,7 @@ for (const occFile of occupationFiles) {
 const update = async function() {
 	const promises = [];
 	cache.forEach((element, id) => {
-		promises.push(cache.addStats(id, { health: config.update_health, stamina: config.update_stamina, slaps: 5 - element.user.slaps }));
+		promises.push(cache.addStats(id, { health: config.update_health, stamina: config.update_stamina, soul_depth: config.update_soul_depth }));
 	});
 	await Promise.all(promises);
 	setTimeout(update, config.update_delay * 1000);

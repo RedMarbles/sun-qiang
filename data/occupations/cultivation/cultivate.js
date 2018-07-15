@@ -14,6 +14,8 @@ module.exports = {
 	is_active: 'active',
 	// The amount of stamina points needed to use this skill
 	stamina: 2,
+	// The amount of soul depth needed to use this skill
+	soul_depth: 0.1,
 	// The amount of time before this skill can be used again (seconds)
 	cooldown: 5,
 	// Whether the skill can only be used when the user is currently in this occupation

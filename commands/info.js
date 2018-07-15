@@ -5,7 +5,7 @@ const colors = require('../data/colors');
 
 async function generateEmbed(message, target, cache) {
 	const role = cache.getRole(target);
-	const { health, health_max, slaps, stamina, stamina_max } = await cache.getStats(target.id);
+	const { health, health_max, stamina, stamina_max, soul_depth, soul_depth_max, curr_gold, curr_low, curr_mid, curr_high } = await cache.getStats(target.id);
 
 	// Make sure the user has the default skill for the current class
 	if (role) await cache.defaultSkill(target, message.channel, role.name);
@@ -18,9 +18,18 @@ async function generateEmbed(message, target, cache) {
 	embed.addField('Occupation', (role) ? role.name : 'Unemployed', true);
 	embed.addField('Health', `${health}/${health_max} HP`, true);
 	embed.addField('Stamina', `${stamina}/${stamina_max} SP`, true);
+	embed.addField('Soul Depth', `${soul_depth}/${soul_depth_max}`, true);
+
+	// Currencies
+	const bankAccount = [ `${curr_gold} Gold Coins` ];
+	if (curr_low > 0) bankAccount.push(`${curr_low} Low-Tier Spirit Stones`);
+	if (curr_mid > 0) bankAccount.push(`${curr_mid} Mid-Tier Spirit Stones`);
+	if (curr_high > 0) bankAccount.push(`${curr_high} High-Tier Spirit Stones`);
+	embed.addField('Wallet', bankAccount.join('\n'), true);
 
 	const obtainedSkills = await cache.getSkillNames(target.id);
 	async function process(occData, occName) {
+		// Create the info tab of details of each occupation and skills learned under it
 		const occinfo = [];
 
 		// Exp and skill points info
@@ -49,7 +58,7 @@ async function generateEmbed(message, target, cache) {
 	});
 	await Promise.all(promises);
 
-	embed.addField('Ammunition', `${slaps} slaps`, true);
+	// embed.addField('Ammunition', `${slaps} slaps`, true);
 
 	// const offenseMultpliers = [];
 	// attributes.forEach(att => {

@@ -4,10 +4,15 @@
  * - user_id - (PK) (STRING)
  * - health - (INT) how much health is remaining
  * - health_max - (INT) the maximum health for the character
- * - slaps - (INT) number of slaps remaining for the day
+ * / slaps - (INT) number of slaps remaining for the day
  * - stamina - (INT) stamina points, used to execute active skills
  * - stamina_max - (INT) the maximum stamina for the character
- * - spirit_stones - (INT) the amount of wealth of the character
+ * + soul_depth - (FLOAT) the soul depth of the character
+ * + soul_depth_max - (FLOAT) the maximum soul depth  of the character
+ * + curr_gold - (INT) the amount of wealth of the character - gold
+ * + curr_low - (INT) the amount of wealth of the character - low tier spirit stones
+ * + curr_med - (INT) the amount of wealth of the character - mid tier spitit stones
+ * + curr_high - (INT) the amount of weapth of the character - high tier spirit stones
  */
 
 module.exports = (sequelize, DataTypes) => {
@@ -26,11 +31,6 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 100,
 			allowNull: false,
 		},
-		slaps: {
-			type: DataTypes.INTEGER,
-			defaultValue: 5,
-			allowNull: false,
-		},
 		stamina: {
 			type: DataTypes.INTEGER,
 			defaultValue: 10,
@@ -41,7 +41,32 @@ module.exports = (sequelize, DataTypes) => {
 			defaultValue: 10,
 			allowNull: false,
 		},
-		spirit_stones: {
+		soul_depth: {
+			type: DataTypes.FLOAT,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		soul_depth_max: {
+			type: DataTypes.FLOAT,
+			defaultValue: 0.1,
+			allowNull: false,
+		},
+		curr_gold: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		curr_low: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		curr_med: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+			allowNull: false,
+		},
+		curr_high: {
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
 			allowNull: false,

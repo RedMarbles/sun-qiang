@@ -32,10 +32,10 @@ module.exports = {
 				description: `Sorry **${message.member.displayName}**, but your health is currently ${userStats.health}. You're too weak to fight.`,
 			}));
 		}
-		if (userStats.slaps < 1) {
+		if (userStats.stamina < 3) {
 			return message.channel.send(new Discord.RichEmbed({
 				color: colors.red,
-				description: `Sorry **${message.member.displayName}**, but you've used up all your slaps for the day.`,
+				description: `Sorry **${message.member.displayName}**, but you need at least 3 SP to faceslap someone.`,
 			}));
 		}
 		if (targetStats.health < 1) {
@@ -49,15 +49,16 @@ module.exports = {
 		const matchup = attributes.find(att => (att.user === userRole.name) && (att.target === targetRole.name));
 		const multiplier = (matchup) ? matchup.multiplier : 1.0;
 		const damage = Math.floor(DEFAULT_DAMAGE * multiplier);
-		await cache.addStats(target.id, {health: -damage});
-		await cache.addStats(message.member.id, {slaps: -1});
+		await cache.addStats(target.id, { health: -damage });
+		await cache.addStats(message.member.id, { stamina: -3 });
 
 		let output = `*${userRole.name}* **${message.member.displayName}** brutally faceslapped *${targetRole.name}* **${target.displayName}**, dealing **${damage}** damage.`;
 		output += `\n${target.displayName} has **${targetStats.health} HP** remaining.`;
-		output += `\n${message.member.displayName} has **${userStats.slaps}** slaps remaining for the day.`;
-		message.channel.send(new Discord.RichEmbed({ 
-			color: colors.yellow, 
-			title: 'Faceslap!', 
-			description: output, }));
+		output += `\n${message.member.displayName} has **${userStats.stamina}** SP remaining.`;
+		message.channel.send(new Discord.RichEmbed({
+			color: colors.yellow,
+			title: 'Faceslap!',
+			description: output,
+		}));
 	},
 };

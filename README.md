@@ -50,3 +50,8 @@ Work to do:
 * Battle framework
 * Marketplace framework for selling items to sink, as well as trading items between users (sell to market for 1/5th of base price, sell to user for 3/5th of base price, buy from user for 5/5th of base price)
 * Battle skill & Battle item - Only 4 skills and 4 items can be carried into battle. Needs database field to record.
+* `request` skill to search for users or specify users for specific requirements, like item-trading, healing, etc.
+* `info` tab should provide information about buffs and their timers.
+* Allow users to be referred to without using mentions.
+* Bot has to auto-add the 11 roles when ititialized or added to a server.
+* Implement the buff system for active and passive skills.
