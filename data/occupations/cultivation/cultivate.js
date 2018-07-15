@@ -47,7 +47,8 @@ module.exports = {
 				title: `${message.member.displayName} is cultivating`,
 				description: `You ponder the mysteries of life, the universe and everything, but are quickly distracted by thoughts of that ${distraction} you saw last night.`,
 			}).addField('Cultivation EXP', `${cache.get(message.member.id).occupations.get('Cultivation').experience} (+0 EXP)`, true)
-				.addField('Stamina', `${user.stamina}/${user.stamina_max} SP ( -${this.stamina} SP )`, true));
+				.addField('Stamina', `${user.stamina}/${user.stamina_max} SP ( -${this.stamina} SP )`, true)
+				.addField('Soul Depth', `${user.soul_depth.toFixed(1)}/${user.soul_depth_max.toFixed(1)} ( -${this.soul_depth} )`, true));
 		}
 
 		// Success condition
@@ -67,6 +68,7 @@ module.exports = {
 			title: `${message.member.displayName} is cultivating`,
 			description: successLine,
 		}).addField('Cultivation EXP', `${cache.get(message.member.id).occupations.get('Cultivation').experience} (+${expGain} EXP)`, true)
-			.addField('Stamina', `${user.stamina}/${user.stamina_max} SP ( -${this.stamina} SP )`, true));
+			.addField('Stamina', `${user.stamina}/${user.stamina_max} SP ( -${this.stamina} SP )`, true)
+			.addField('Soul Depth', `${user.soul_depth.toFixed(1)}/${user.soul_depth_max.toFixed(1)} ( -${this.soul_depth} )`, true));
 	},
 };

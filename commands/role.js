@@ -5,22 +5,30 @@ const colors = require('../data/colors');
 const { prefix } = require('../config');
 
 async function changeRole(oldRole, newRole, message, cache) {
-	if (!newRole) {
-		message.channel.send('Sorry, this server doesn\'t seem to have that role available.');
-		return false;
+	try {
+		if (!newRole) {
+			message.channel.send('Sorry, this server doesn\'t seem to have that role available.');
+			return false;
+		}
+		if (oldRole) {
+			await message.member.removeRole(oldRole.id);
+		}
+		await message.member.addRole(newRole.id);
+		message.channel.send(new Discord.RichEmbed({ color: colors.gray, description: `${message.author} has become a **${newRole.name}**!` }));
+		await cache.defaultSkill(message.member, message.channel, newRole.name);
+		return true;
 	}
-	if (oldRole) {
-		await message.member.removeRole(oldRole.id);
+	catch(error) {
+		console.error(`ERROR [command role.changeRole()] - (oldRole: ${oldRole.name}, newRole: ${newRole.name})`);
 	}
-	await message.member.addRole(newRole.id);
-	message.channel.send(new Discord.RichEmbed({ color: colors.gray, description: `${message.author} has become a **${newRole.name}**!` }));
-	await cache.defaultSkill(message.member, message.channel, newRole.name);
-	return true;
 }
 
 function findOccupation(input, message) {
 	const newOccupation = occupations.find(occ => (input === occ.name.toLowerCase()) || occ.alias.map(a => a.toLowerCase()).includes(input));
-	if (!newOccupation || newOccupation.unlisted) return message.reply(`Sorry, I couldn't find an occupation that matches '${input}'`);
+	if (!newOccupation || newOccupation.unlisted) {
+		message.reply(`Sorry, I couldn't find an occupation that matches '${input}'`);
+		return undefined;
+	}
 	return message.guild.roles.find(r => r.name === newOccupation.name);
 }
 

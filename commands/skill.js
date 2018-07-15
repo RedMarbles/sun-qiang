@@ -14,9 +14,9 @@ module.exports = {
 	guildOnly: true,
 	cooldown: 5,
 	async execute(message, args, cache) {
-		try {
-			const skillName = args.shift();
+		const skillName = args.shift();
 
+		try {
 			const availableSkills = await cache.getSkillNames(message.author.id);
 			if (!availableSkills.includes(skillName)) {
 				return message.channel.send(new RichEmbed({
@@ -82,14 +82,14 @@ module.exports = {
 
 			// Update skill usage counter and stamina
 			await cache.incrementSkillCount(message.author.id, skillName);
-			const soulUsage = (user.soul_depth !== undefined) ? user.soul_depth : 0;
+			const soulUsage = (skill.soul_depth !== undefined) ? skill.soul_depth : 0;
 			await cache.addStats(message.author.id, { stamina: -skill.stamina, soul_depth: -soulUsage });
 
 			// Execute the skill
 			await skill.execute(message, args, cache);
 		}
 		catch(error) {
-			return console.log(`ERROR [command skill] - Unknown error - (args: [ ${args.join(' ')} ]) \n${error}`);
+			return console.log(`ERROR [command skill] - Unknown error - (skill: ${skillName}, message: ${message.content}) \n${error}`);
 		}
 	},
 };

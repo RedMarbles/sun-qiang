@@ -46,6 +46,7 @@ Work to do:
 * Interface class for sending messages
 * Set up separate cultivation and master teacher occupations and isolate them from the rest of the elements.
 * Item framework
+* Add item rewards for the `paint` (lv 1 and 2 paintings) and `gather_herbs` (tier 0 herbs) skills.
 * Stats framework - Base stats + passive skill stats + equipment stats + active skill/consumable stats - Strength, Soul Depth, Endurance
 * Battle framework
 * Marketplace framework for selling items to sink, as well as trading items between users (sell to market for 1/5th of base price, sell to user for 3/5th of base price, buy from user for 5/5th of base price)

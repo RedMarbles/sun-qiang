@@ -27,6 +27,9 @@ module.exports = {
 		const skill_check = Math.random();
 
 		const DEFAULT_EXP = 1;
+		const expGain = DEFAULT_EXP * 1;
+
+		const user = await cache.getStats(message.author.id);
 
 		// Failure condition
 		if (skill_check > SUCCESS_RATE) {
@@ -34,17 +37,17 @@ module.exports = {
 				color: colors.darkred,
 				title: `${message.member.displayName} is singing about love and loss and pizza`,
 				description: 'You try to sing a note an octave higher than you can reach and end up causing a nearby bird to bleed to death from its eardrums',
-			}).addField('EXP gained', '0', true)
-				.addField('Demonic Tunist EXP', cache.get(message.member.id).occupations.get('Demonic Tunist').experience, true));
+			}).addField(`${this.occupation} EXP`, `${cache.get(message.member.id).occupations.get(this.occupation).experience} (+0 EXP)`, true)
+			.addField('Stamina', `${user.stamina}/${user.stamina_max} SP ( -${this.stamina} SP )`, true));
 		}
 
 		// Success condition
-		await cache.addOccupationExperience(message, 'Demonic Tunist', DEFAULT_EXP);
+		await cache.addOccupationExperience(message, 'Demonic Tunist', expGain);
 		return message.channel.send(new RichEmbed({
 			color: colors.green,
 			title: `${message.member.displayName} is singing about love and loss and pizza`,
 			description: 'After singing for about an hour, you feel satisfied with the knowledge that you can crush your peers in karaoke.',
-		}).addField('EXP gained', `${DEFAULT_EXP}`, true)
-			.addField('Demonic Tunist EXP', cache.get(message.member.id).occupations.get('Demonic Tunist').experience, true));
+		}).addField(`${this.occupation} EXP`, `${cache.get(message.member.id).occupations.get(this.occupation).experience} (+${expGain} EXP)`, true)
+			.addField('Stamina', `${user.stamina}/${user.stamina_max} SP ( -${this.stamina} SP )`, true));
 	},
 };

@@ -27,6 +27,9 @@ module.exports = {
 		const skill_check = Math.random();
 
 		const DEFAULT_EXP = 1;
+		const expGain = DEFAULT_EXP * 1;
+
+		const user = await cache.getStats(message.author.id);
 
 		// Failure condition
 		if (skill_check > SUCCESS_RATE) {
@@ -34,17 +37,17 @@ module.exports = {
 				color: colors.darkred,
 				title: `${message.member.displayName} is gathering herbs`,
 				description: 'You fumbled around in the woods for an hour but didn\'t find anything other than embarassment.',
-			}).addField('EXP gained', '0', true)
-				.addField('Apothecary EXP', cache.get(message.member.id).occupations.get('Apothecary').experience, true));
+			}).addField(`${this.occupation} EXP`, `${cache.get(message.member.id).occupations.get(this.occupation).experience} (+0 EXP)`, true)
+				.addField('Stamina', `${user.stamina}/${user.stamina_max} SP ( -${this.stamina} SP )`, true));
 		}
 
 		// Success condition
-		await cache.addOccupationExperience(message, 'Apothecary', DEFAULT_EXP);
+		await cache.addOccupationExperience(message, 'Apothecary', expGain);
 		return message.channel.send(new RichEmbed({
 			color: colors.green,
 			title: `${message.member.displayName} is gathering herbs`,
 			description: 'After searching around in the woods for a while, you finally find a valuable herb!',
-		}).addField('EXP gained', `${DEFAULT_EXP}`, true)
-			.addField('Apothecary EXP', cache.get(message.member.id).occupations.get('Apothecary').experience, true));
+		}).addField(`${this.occupation} EXP`, `${cache.get(message.member.id).occupations.get(this.occupation).experience} (+${expGain} EXP)`, true)
+			.addField('Stamina', `${user.stamina}/${user.stamina_max} SP ( -${this.stamina} SP )`, true));
 	},
 };
