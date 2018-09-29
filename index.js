@@ -83,7 +83,7 @@ client.on('ready', async () => {
 client.on('message', async (message) => {
 	if (message.author.bot) return;
 	if (!message.content.startsWith(prefix)) return;
-	if (!message.channel.name.startsWith(DEFAULT_CHANNEL) && message.channel.type !== 'dm') {
+	if (message.channel.type !== 'dm' && !message.channel.name.startsWith(DEFAULT_CHANNEL)) {
 		return message.channel.send(`Sorry, Sun Qiang will only reply on the ${DEFAULT_CHANNEL} channels`);
 	}
 
@@ -156,6 +156,11 @@ client.on('message', async (message) => {
 	}
 });
 
-client.login(config.token).catch(console.error);
+
+// The authentication token for the bot
+const auth = require('./auth.json');
+
+// Start the bot
+client.login(auth.token).catch(console.error);
 
 update();

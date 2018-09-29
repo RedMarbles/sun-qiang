@@ -1,0 +1,7 @@
+{
+	"prefix": "$",
+	"update_delay": 60,
+	"update_stamina": 5,
+	"update_health": 5,
+	"update_soul_depth": 0.1
+}
